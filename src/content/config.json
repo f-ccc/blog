@@ -1,0 +1,11 @@
+{
+  "title": "我的博客",
+  "description": "分享技术、开发和生活的个人博客 - 基于 Next.js 构建",
+  "lang": "zh-CN",
+  "avatar": "/avatar.jpg",
+  "name": "我的博客",
+  "social": [
+    { "name": "GitHub", "url": "https://github.com/f-ccc", "icon": "github" },
+    { "name": "Email", "url": "mailto:admin@example.com", "icon": "email" }
+  ]
+}

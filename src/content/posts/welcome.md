@@ -1,9 +1,9 @@
 ---
 title: 欢迎来到我的博客
-description: 这是我的第一篇博客文章，使用 Next.js 构建，借鉴了 Firefly 的 Material Design 3 设计风格。
+description: 这是我的第一篇博客文章，使用 Next.js 构建，借鉴了 Firefly 的 Material Design 3 设计风格。包含完整的前后端功能。
 date: 2026-06-28
-tags: [Hello, Getting Started]
-category: Life
+tags: [Hello, 开篇, Next.js]
+category: 生活
 published: true
 pinned: true
 ---
@@ -40,10 +40,9 @@ function greet(name: string): string {
   return `Hello, ${name}! Welcome to my blog.`
 }
 
-console.log(greet('Visitor'))
+console.log(greet('访客'))
 ```
 
 > 生活就像一盒巧克力，你永远不知道下一颗是什么味道。
-> — Forrest Gump
 
 后续会分享更多关于技术、开发和生活的文章，敬请期待！

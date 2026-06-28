@@ -2,11 +2,20 @@
 
 import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Search } from 'lucide-react'
 import { useState } from 'react'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+
+  const navLinks = [
+    { href: '/', label: '首页' },
+    { href: '/blog', label: '博客' },
+    { href: '/categories', label: '分类' },
+    { href: '/tags', label: '标签' },
+    { href: '/archive', label: '归档' },
+    { href: '/about', label: '关于' },
+  ]
 
   return (
     <header className="sticky top-0 z-50 border-b border-outline-variant bg-surface/80 backdrop-blur-md">
@@ -15,63 +24,62 @@ export default function Navbar() {
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-on-primary">
             B
           </span>
-          <span>My Blog</span>
+          <span className="hidden sm:inline">我的博客</span>
         </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden items-center gap-1 md:flex">
-          <NavLink href="/">Home</NavLink>
-          <NavLink href="/blog">Blog</NavLink>
-          <NavLink href="/admin">Admin</NavLink>
-          <div className="ml-2">
+          {navLinks.map(link => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="rounded-lg px-3 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface no-underline"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <Link
+            href="/search"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors no-underline"
+            aria-label="搜索"
+          >
+            <Search size={18} />
+          </Link>
+          <div className="ml-1">
             <ThemeToggle />
           </div>
         </nav>
 
-        {/* Mobile Menu Button */}
-        <div className="flex items-center gap-2 md:hidden">
+        {/* Mobile */}
+        <div className="flex items-center gap-1 md:hidden">
+          <Link href="/search" className="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high no-underline">
+            <Search size={18} />
+          </Link>
           <ThemeToggle />
           <button
             onClick={() => setOpen(!open)}
-            className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-surface-container-high cursor-pointer"
-            aria-label="Toggle menu"
+            className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-surface-container-high cursor-pointer"
+            aria-label="菜单"
           >
-            {open ? <X size={22} /> : <Menu size={22} />}
+            {open ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Nav */}
       {open && (
         <nav className="border-t border-outline-variant bg-surface px-4 pb-4 pt-2 md:hidden">
-          <MobileNavLink href="/" onClick={() => setOpen(false)}>Home</MobileNavLink>
-          <MobileNavLink href="/blog" onClick={() => setOpen(false)}>Blog</MobileNavLink>
-          <MobileNavLink href="/admin" onClick={() => setOpen(false)}>Admin</MobileNavLink>
+          {navLinks.map(link => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setOpen(false)}
+              className="block rounded-lg px-3 py-2.5 text-base font-medium text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface no-underline"
+            >
+              {link.label}
+            </Link>
+          ))}
         </nav>
       )}
     </header>
-  )
-}
-
-function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <Link
-      href={href}
-      className="rounded-lg px-3 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface no-underline"
-    >
-      {children}
-    </Link>
-  )
-}
-
-function MobileNavLink({ href, onClick, children }: { href: string; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <Link
-      href={href}
-      onClick={onClick}
-      className="block rounded-lg px-3 py-2.5 text-base font-medium text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface no-underline"
-    >
-      {children}
-    </Link>
   )
 }
