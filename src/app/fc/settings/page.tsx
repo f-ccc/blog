@@ -1,22 +1,24 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Save } from 'lucide-react'
+import { useState, useEffect, useCallback } from 'react'
+import { Save, CheckCircle2, RefreshCw } from 'lucide-react'
 
 export default function FcSettingsPage() {
   const [config, setConfig] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
+  const [published, setPublished] = useState<number | null>(null)
 
-  useEffect(() => {
-    fetch('/api/config')
-      .then(res => res.json())
-      .then(data => {
-        setConfig(data)
-        setLoading(false)
-      })
+  const loadConfig = useCallback(async () => {
+    const res = await fetch('/api/config', { cache: 'no-store' })
+    const data = await res.json()
+    setConfig(data)
+    setPublished(data.configUpdated || null)
+    setLoading(false)
   }, [])
+
+  useEffect(() => { loadConfig() }, [loadConfig])
 
   const update = (key: string, value: any) => {
     setConfig({ ...config, [key]: value })
@@ -31,9 +33,13 @@ export default function FcSettingsPage() {
       body: JSON.stringify(config),
     })
     if (res.ok) {
-      setMessage('保存成功')
+      const data = await res.json()
+      setPublished(data.configUpdated)
+      setMessage('✅ 配置已保存并发布到前端')
+      // Auto-refresh frontend state by re-fetching
+      setTimeout(() => setMessage(''), 3000)
     } else {
-      setMessage('保存失败')
+      setMessage('❌ 保存失败')
     }
     setSaving(false)
   }
@@ -48,16 +54,29 @@ export default function FcSettingsPage() {
           <h1 className="text-2xl font-bold text-on-surface">站点设置</h1>
           <p className="text-sm text-on-surface-variant">管理博客全局配置</p>
         </div>
-        <button onClick={handleSave} disabled={saving}
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-medium text-on-primary hover:opacity-90 transition-opacity disabled:opacity-50 cursor-pointer">
-          <Save size={16} />{saving ? '保存中...' : '保存'}
-        </button>
+        <div className="flex items-center gap-3">
+          {published && (
+            <span className="flex items-center gap-1 text-xs text-on-surface-variant">
+              <CheckCircle2 size={14} className="text-primary" />
+              已发布
+            </span>
+          )}
+          <button onClick={handleSave} disabled={saving}
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-medium text-on-primary hover:opacity-90 transition-opacity disabled:opacity-50 cursor-pointer">
+            {saving ? <RefreshCw size={16} className="animate-spin" /> : <Save size={16} />}
+            {saving ? '发布中...' : '保存并发布'}
+          </button>
+        </div>
       </div>
 
-      {message && <div className="mb-4 rounded-xl bg-primary-container px-4 py-2 text-sm text-on-primary-container">{message}</div>}
+      {message && (
+        <div className="mb-4 rounded-xl bg-primary-container px-4 py-2.5 text-sm text-on-primary-container flex items-center gap-2">
+          <CheckCircle2 size={16} />
+          {message}
+        </div>
+      )}
 
       <div className="space-y-6">
-        {/* 基本设置 */}
         <Section title="基本设置">
           <Field label="站点标题">
             <input value={config.siteTitle} onChange={e => update('siteTitle', e.target.value)}
@@ -69,7 +88,6 @@ export default function FcSettingsPage() {
           </Field>
         </Section>
 
-        {/* 主题设置 */}
         <Section title="主题设置">
           <Field label="主题色相 (Hue 0-360)">
             <div className="flex items-center gap-3">
@@ -77,6 +95,8 @@ export default function FcSettingsPage() {
                 className="flex-1 accent-primary" />
               <span className="w-12 text-sm text-on-surface">{config.themeHue}°</span>
             </div>
+            {/* Preview dot */}
+            <div className="mt-2 h-6 w-full rounded-lg" style={{ backgroundColor: `hsl(${config.themeHue || 180}, 60%, 50%)` }} />
           </Field>
           <Field label="壁纸模式">
             <select value={config.wallpaperMode} onChange={e => update('wallpaperMode', e.target.value)}
@@ -93,7 +113,6 @@ export default function FcSettingsPage() {
           </Field>
         </Section>
 
-        {/* 特效 */}
         <Section title="特效开关">
           <ToggleField label="🌸 樱花飘落" checked={config.sakuraEnabled} onChange={v => update('sakuraEnabled', v)} />
           {config.sakuraEnabled && (
@@ -105,7 +124,6 @@ export default function FcSettingsPage() {
           <ToggleField label="🌊 水波纹" checked={config.waveEnabled} onChange={v => update('waveEnabled', v)} />
         </Section>
 
-        {/* 侧边栏组件 */}
         <Section title="侧边栏组件开关">
           <ToggleField label="时间进度条" checked={config.showTimeProgress} onChange={v => update('showTimeProgress', v)} />
           <ToggleField label="日历热力图" checked={config.showCalendar} onChange={v => update('showCalendar', v)} />
@@ -115,7 +133,6 @@ export default function FcSettingsPage() {
           <ToggleField label="音乐播放器" checked={config.showMusicPlayer} onChange={v => update('showMusicPlayer', v)} />
         </Section>
 
-        {/* 站点运行时间 */}
         <Section title="站点运行时间">
           <Field label="开始日期">
             <input type="date" value={config.siteStartDate} onChange={e => update('siteStartDate', e.target.value)}

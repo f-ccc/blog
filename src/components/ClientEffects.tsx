@@ -1,21 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
+import { useConfig } from '@/hooks/useConfig'
 
 const SakuraEffect = dynamic(() => import('@/components/effects/SakuraEffect'), { ssr: false })
 const WaveEffect = dynamic(() => import('@/components/effects/WaveEffect'), { ssr: false })
 const FloatingControls = dynamic(() => import('@/components/effects/FloatingControls'), { ssr: false })
 
 export default function ClientEffects() {
-  const [config, setConfig] = useState<any>(null)
-
-  useEffect(() => {
-    fetch('/api/config')
-      .then(res => res.json())
-      .then(data => setConfig(data))
-      .catch(() => {})
-  }, [])
+  const { config } = useConfig()
 
   return (
     <>

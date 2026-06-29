@@ -1,18 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getConfig, updateConfig } from '@/lib/config'
+import { getConfig, updateConfig, getConfigTimestamp } from '@/lib/config'
+import { revalidateTag } from 'next/cache'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const config = getConfig()
   const { adminPassword, ...safeConfig } = config
-  return NextResponse.json(safeConfig)
+  return NextResponse.json({
+    ...safeConfig,
+    configUpdated: getConfigTimestamp(),
+  })
 }
 
 export async function PUT(request: NextRequest) {
   try {
     const data = await request.json()
     const config = updateConfig(data)
+    // 🎯 关键：让所有标记了 'config' 的 fetch 缓存立即失效
+    revalidateTag('config', { expire: 0 })
     const { adminPassword, ...safeConfig } = config
-    return NextResponse.json(safeConfig)
+    return NextResponse.json({
+      ...safeConfig,
+      configUpdated: getConfigTimestamp(),
+    })
   } catch (error) {
     return NextResponse.json({ error: '保存失败' }, { status: 500 })
   }

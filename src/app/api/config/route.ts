@@ -1,9 +1,13 @@
 import { NextResponse } from 'next/server'
-import { getConfig } from '@/lib/config'
+import { getConfig, getConfigTimestamp } from '@/lib/config'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const config = getConfig()
-  // Don't expose password
   const { adminPassword, ...safeConfig } = config
-  return NextResponse.json(safeConfig)
+  return NextResponse.json({
+    ...safeConfig,
+    configUpdated: getConfigTimestamp(),
+  })
 }
