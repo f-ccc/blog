@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ClientEffects from "@/components/ClientEffects";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,10 +17,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "My Blog",
-    template: "%s | My Blog",
+    default: "我的博客",
+    template: "%s | 我的博客",
   },
-  description: "A personal blog built with Next.js, inspired by Firefly",
+  description: "分享技术、开发与生活的个人博客",
 };
 
 export default function RootLayout({
@@ -40,8 +41,12 @@ export default function RootLayout({
               (function() {
                 try {
                   var theme = localStorage.getItem('theme');
+                  var hue = localStorage.getItem('theme-hue');
                   if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                     document.documentElement.classList.add('dark');
+                  }
+                  if (hue) {
+                    document.documentElement.style.setProperty('--md-hue', hue);
                   }
                 } catch(e) {}
               })();
@@ -53,6 +58,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
+        <ClientEffects />
       </body>
     </html>
   );
