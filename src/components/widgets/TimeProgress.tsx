@@ -3,27 +3,25 @@
 import { useEffect, useState } from 'react'
 
 export default function TimeProgress() {
+  const [mounted, setMounted] = useState(false)
   const [progress, setProgress] = useState({ year: 0, month: 0, week: 0, day: 0 })
 
   useEffect(() => {
+    setMounted(true) // 🎯 水合完成后再渲染真实内容
+
     const calc = () => {
       const now = new Date()
-      
-      // Year progress
       const startOfYear = new Date(now.getFullYear(), 0, 1)
       const endOfYear = new Date(now.getFullYear() + 1, 0, 1)
       const year = ((now.getTime() - startOfYear.getTime()) / (endOfYear.getTime() - startOfYear.getTime())) * 100
 
-      // Month progress
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
       const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
       const month = ((now.getTime() - startOfMonth.getTime()) / (endOfMonth.getTime() - startOfMonth.getTime())) * 100
 
-      // Week progress
       const dayOfWeek = now.getDay() || 7
       const week = ((dayOfWeek - 1) / 7) * 100
 
-      // Day progress
       const day = ((now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds()) / 86400) * 100
 
       setProgress({ year, month, week, day })
@@ -33,6 +31,21 @@ export default function TimeProgress() {
     const timer = setInterval(calc, 60000)
     return () => clearInterval(timer)
   }, [])
+
+  // 🎯 水合前渲染骨架屏，结构完全一致但无动态数据
+  if (!mounted) {
+    return (
+      <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+        <h3 className="mb-3 text-sm font-semibold text-on-surface-variant">⏱ 时间进度</h3>
+        <div className="space-y-2.5">
+          <SkeletonBar />
+          <SkeletonBar />
+          <SkeletonBar />
+          <SkeletonBar />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="rounded-2xl border border-outline-variant bg-surface p-5">
@@ -55,10 +68,21 @@ function ProgressBar({ label, value, color }: { label: string; value: number; co
         <span>{value.toFixed(1)}%</span>
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-surface-container-high">
-        <div
-          className={`h-full rounded-full transition-all duration-1000 ${color}`}
-          style={{ width: `${Math.min(value, 100)}%` }}
-        />
+        <div className={`h-full rounded-full transition-all duration-1000 ${color}`} style={{ width: `${Math.min(value, 100)}%` }} />
+      </div>
+    </div>
+  )
+}
+
+function SkeletonBar() {
+  return (
+    <div>
+      <div className="mb-1 flex justify-between text-xs text-on-surface-variant">
+        <span className="h-3 w-8 rounded bg-surface-container-high" />
+        <span className="h-3 w-10 rounded bg-surface-container-high" />
+      </div>
+      <div className="h-2 overflow-hidden rounded-full bg-surface-container-high">
+        <div className="h-full w-0 rounded-full" />
       </div>
     </div>
   )

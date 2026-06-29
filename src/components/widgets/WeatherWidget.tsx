@@ -12,12 +12,13 @@ interface WeatherData {
 }
 
 export default function WeatherWidget({ city }: { city: string }) {
+  const [mounted, setMounted] = useState(false)
   const [weather, setWeather] = useState<WeatherData | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    setMounted(true) // 🎯 水合完成后再执行客户端逻辑
     if (!city) { setLoading(false); return }
-    // Simulated weather - in production, use a weather API
     setWeather({
       temperature: 28,
       weather: '晴',
@@ -28,6 +29,26 @@ export default function WeatherWidget({ city }: { city: string }) {
     })
     setLoading(false)
   }, [city])
+
+  // 🎯 水合前渲染结构完全一致的骨架屏
+  if (!mounted) {
+    return (
+      <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+        <h3 className="mb-3 text-sm font-semibold text-on-surface-variant">🌤 天气</h3>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="h-9 w-16 animate-pulse rounded bg-surface-container-high" />
+            <div className="h-4 w-10 animate-pulse rounded bg-surface-container-high" />
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            {[1,2,3,4].map(i => (
+              <div key={i} className="h-14 animate-pulse rounded-lg bg-surface-container-high" />
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   if (loading) return null
 
