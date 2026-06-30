@@ -53,7 +53,8 @@ export default function Home() {
             </div>
           ) : (
             <div className="space-y-5">
-              {posts.slice(0, 10).map(post => (
+              {/* 🎯 剔除置顶文章，避免重复 */}
+              {posts.filter(p => !p.pinned).slice(0, 10).map(post => (
                 <BlogCard key={post.slug} post={post} />
               ))}
             </div>

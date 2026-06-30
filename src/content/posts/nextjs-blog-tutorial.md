@@ -6,6 +6,7 @@ tags: [Next.js, 教程, Web开发]
 category: 技术
 published: true
 pinned: false
+image: https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200
 ---
 
 # 如何搭建一个 Next.js 博客

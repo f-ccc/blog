@@ -115,6 +115,19 @@ export default async function BlogPostPage({ params }: Props) {
           )}
         </div>
       </div>
+
+      {/* 评论区占位（可接入 Waline / Giscus / Twikoo） */}
+      <div className="mt-8 rounded-2xl border border-outline-variant bg-surface p-6">
+        <h3 className="mb-4 text-base font-semibold text-on-surface">💬 评论</h3>
+        <div className="rounded-xl bg-surface-container-high p-6 text-center">
+          <p className="text-sm text-on-surface-variant">
+            评论功能待接入 —— 支持 Waline / Giscus / Twikoo 等主流评论系统
+          </p>
+          <p className="mt-1 text-xs text-on-surface-variant">
+            在 <code className="rounded bg-surface-container px-1 text-xs">src/components/CommentSection.tsx</code> 中配置你的评论服务
+          </p>
+        </div>
+      </div>
     </article>
   )
 }

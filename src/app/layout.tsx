@@ -1,27 +1,21 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ClientEffects from "@/components/ClientEffects";
+import { getConfig } from "@/lib/config";
+import type { Metadata } from "next";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: {
-    default: "我的博客",
-    template: "%s | 我的博客",
-  },
-  description: "分享技术、开发与生活的个人博客",
-};
+/** 🎯 动态元数据：每次请求拉取最新配置 */
+export async function generateMetadata(): Promise<Metadata> {
+  const config = getConfig()
+  return {
+    title: {
+      default: config.siteTitle || '我的博客',
+      template: `%s | ${config.siteTitle || '我的博客'}`,
+    },
+    description: config.siteDescription || '分享技术、开发与生活的个人博客',
+  }
+}
 
 export default function RootLayout({
   children,
@@ -32,7 +26,6 @@ export default function RootLayout({
     <html
       lang="zh-CN"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable}`}
     >
       <head>
         <script
@@ -54,7 +47,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col antialiased">
+      <body className="min-h-screen flex flex-col antialiased font-sans">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

@@ -18,8 +18,8 @@ export async function PUT(request: NextRequest) {
     const data = await request.json()
     const config = updateConfig(data)
     // 🎯 双管齐下：路径 + 标签双重失效
-    revalidatePath('/', 'layout')     // 刷新根布局缓存（标题、特效开关等）
-    revalidateTag('config', { expire: 0 })
+    revalidatePath('/', 'layout')
+    revalidateTag('global-config', { expire: 0 })
     const { adminPassword, ...safeConfig } = config
     return NextResponse.json({
       ...safeConfig,

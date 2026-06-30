@@ -6,6 +6,7 @@ tags: [Hello, 开篇, Next.js]
 category: 生活
 published: true
 pinned: true
+image: https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200
 ---
 
 # 欢迎来到我的博客 🎉
