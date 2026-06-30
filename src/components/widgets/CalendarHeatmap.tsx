@@ -22,7 +22,7 @@ export default function CalendarHeatmap({ posts }: { posts: Post[] }) {
   })
 
   return (
-    <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+    <div className="glass-card-static p-5">
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-sm font-semibold text-on-surface-variant">📅 日历</h3>
         <div className="flex items-center gap-2">
@@ -69,7 +69,7 @@ export default function CalendarHeatmap({ posts }: { posts: Post[] }) {
       {postsByDay.length > 0 && (
         <div className="mt-3 space-y-1">
           {postsByDay.slice(0, 3).map(post => (
-            <Link key={post.slug} href={`/blog/${post.slug}`} className="flex items-center gap-2 rounded-lg px-2 py-1 text-xs text-on-surface-variant hover:bg-surface-container-high transition-colors no-underline">
+            <Link key={post.slug} href={`/blog/${post.slug}`} className="flex items-center gap-2 rounded-xl px-2 py-1 text-xs text-on-surface-variant hover:bg-primary/8 transition-colors no-underline">
               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
               <span className="line-clamp-1">{post.title}</span>
             </Link>

@@ -35,7 +35,7 @@ export default function TimeProgress() {
   // 🎯 水合前渲染骨架屏，结构完全一致但无动态数据
   if (!mounted) {
     return (
-      <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+      <div className="glass-card-static p-5">
         <h3 className="mb-3 text-sm font-semibold text-on-surface-variant">⏱ 时间进度</h3>
         <div className="space-y-2.5">
           <SkeletonBar />
@@ -48,7 +48,7 @@ export default function TimeProgress() {
   }
 
   return (
-    <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+    <div className="glass-card-static p-5">
       <h3 className="mb-3 text-sm font-semibold text-on-surface-variant">⏱ 时间进度</h3>
       <div className="space-y-2.5">
         <ProgressBar label="本年" value={progress.year} color="bg-primary" />

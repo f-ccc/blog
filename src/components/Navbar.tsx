@@ -23,47 +23,47 @@ export default function Navbar() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 border-b border-outline-variant bg-surface/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 nav-glass">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight text-on-surface no-underline">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-on-primary">
+        <Link href="/" className="group flex items-center gap-2.5 text-xl font-bold tracking-tight text-on-surface no-underline">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/90 text-sm font-bold text-on-primary shadow-lg shadow-primary/20 transition-transform group-hover:scale-105">
             {initial}
           </span>
-          <span className="hidden sm:inline">{siteTitle}</span>
+          <span className="hidden sm:inline bg-gradient-to-r from-on-surface to-primary bg-clip-text text-transparent">{siteTitle}</span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-0.5 md:flex">
           {navLinks.map(link => (
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface no-underline"
+              className="relative rounded-xl px-3.5 py-2 text-sm font-medium text-on-surface-variant transition-all duration-300 hover:text-on-surface hover:bg-primary/8 no-underline"
             >
               {link.label}
             </Link>
           ))}
-          <Link
-            href="/search"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors no-underline"
-            aria-label="搜索"
-          >
-            <Search size={18} />
-          </Link>
-          <div className="ml-1">
+          <div className="ml-2 flex items-center gap-1">
+            <Link
+              href="/search"
+              className="flex h-9 w-9 items-center justify-center rounded-xl text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all duration-300 no-underline"
+              aria-label="搜索"
+            >
+              <Search size={18} />
+            </Link>
             <ThemeToggle />
           </div>
         </nav>
 
         {/* Mobile */}
         <div className="flex items-center gap-1 md:hidden">
-          <Link href="/search" className="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high no-underline">
+          <Link href="/search" className="flex h-9 w-9 items-center justify-center rounded-xl text-on-surface-variant hover:text-primary no-underline">
             <Search size={18} />
           </Link>
           <ThemeToggle />
           <button
             onClick={() => setOpen(!open)}
-            className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-surface-container-high cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-xl hover:bg-primary/8 cursor-pointer transition-colors"
             aria-label="菜单"
           >
             {open ? <X size={20} /> : <Menu size={20} />}
@@ -72,13 +72,14 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <nav className="border-t border-outline-variant bg-surface px-4 pb-4 pt-2 md:hidden">
-          {navLinks.map(link => (
+        <nav className="animate-slide-down border-t border-outline-variant/30 px-4 pb-4 pt-2 md:hidden" style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(20px)' }}>
+          {navLinks.map((link, i) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="block rounded-lg px-3 py-2.5 text-base font-medium text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface no-underline"
+              className="block rounded-xl px-3 py-2.5 text-base font-medium text-on-surface-variant hover:bg-primary/8 hover:text-on-surface no-underline transition-colors"
+              style={{ animationDelay: `${i * 0.05}s` }}
             >
               {link.label}
             </Link>

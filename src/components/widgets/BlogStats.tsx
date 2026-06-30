@@ -23,7 +23,7 @@ export default function BlogStats() {
   if (!stats) return null
 
   return (
-    <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+    <div className="glass-card-static p-5">
       <h3 className="mb-3 text-sm font-semibold text-on-surface-variant">📊 站点统计</h3>
       <div className="grid grid-cols-2 gap-2">
         <StatItem label="文章" value={stats.totalPosts} />
@@ -42,7 +42,7 @@ export default function BlogStats() {
 
 function StatItem({ label, value }: { label: string; value: number | string }) {
   return (
-    <div className="rounded-lg bg-surface-container-high p-2 text-center">
+    <div className="rounded-xl bg-surface-container-high p-2 text-center">
       <p className="text-lg font-bold text-on-surface">{value}</p>
       <p className="text-[10px] text-on-surface-variant">{label}</p>
     </div>

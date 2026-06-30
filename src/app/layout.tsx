@@ -28,6 +28,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="preconnect" href="https://chinese-fonts-cdn.deno.dev" crossOrigin="anonymous" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -39,7 +40,7 @@ export default function RootLayout({
                     document.documentElement.classList.add('dark');
                   }
                   if (hue) {
-                    document.documentElement.style.setProperty('--md-hue', hue);
+                    document.documentElement.style.setProperty('--hue', hue);
                   }
                 } catch(e) {}
               })();
@@ -47,9 +48,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col antialiased font-sans">
+      <body className="min-h-screen flex flex-col antialiased">
+        <div className="site-bg" />
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 relative">{children}</main>
         <Footer />
         <ClientEffects />
       </body>

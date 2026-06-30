@@ -40,7 +40,7 @@ export default function EventCountdown({ events }: { events: EventItem[] }) {
   const event = events[current]
 
   return (
-    <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+    <div className="glass-card-static p-5">
       <h3 className="mb-3 text-sm font-semibold text-on-surface-variant">🎪 活动</h3>
       
       {/* Poster */}

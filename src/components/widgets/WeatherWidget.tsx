@@ -33,7 +33,7 @@ export default function WeatherWidget({ city }: { city: string }) {
   // 🎯 水合前渲染结构完全一致的骨架屏
   if (!mounted) {
     return (
-      <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+      <div className="glass-card-static p-5">
         <h3 className="mb-3 text-sm font-semibold text-on-surface-variant">🌤 天气</h3>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
@@ -53,7 +53,7 @@ export default function WeatherWidget({ city }: { city: string }) {
   if (loading) return null
 
   return (
-    <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+    <div className="glass-card-static p-5">
       <h3 className="mb-3 text-sm font-semibold text-on-surface-variant">🌤 天气</h3>
       {weather ? (
         <div className="space-y-2">
