@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
-import { getSiteConfig } from '@/lib/posts'
+import { getConfig } from '@/lib/config'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: '关于',
@@ -7,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 export default function AboutPage() {
-  const config = getSiteConfig()
+  const config = getConfig()
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
@@ -19,11 +21,11 @@ export default function AboutPage() {
       <div className="rounded-2xl border border-outline-variant bg-surface p-8">
         <div className="mb-6 flex items-center gap-4">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary-container text-2xl font-bold text-on-primary-container">
-            B
+            {config.siteName?.charAt(0) || 'B'}
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-on-surface">{config.name}</h2>
-            <p className="text-sm text-on-surface-variant">{config.description}</p>
+            <h2 className="text-xl font-semibold text-on-surface">{config.siteName || config.siteTitle || '我的博客'}</h2>
+            <p className="text-sm text-on-surface-variant">{config.siteDescription || ''}</p>
           </div>
         </div>
 

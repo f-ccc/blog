@@ -6,13 +6,10 @@ import { Calendar, Tag, ArrowLeft, Clock } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
+
 type Props = {
   params: Promise<{ slug: string }>
-}
-
-export async function generateStaticParams() {
-  const posts = getAllPosts()
-  return posts.map(post => ({ slug: post.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

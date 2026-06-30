@@ -1,8 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getStats } from '@/lib/config'
-import type { Stats } from '@/lib/config'
+
+interface Stats {
+  totalPosts: number
+  totalCategories: number
+  totalTags: number
+  totalWords: number
+  daysRunning: number
+}
 
 export default function BlogStats() {
   const [stats, setStats] = useState<Stats | null>(null)

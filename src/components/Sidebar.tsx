@@ -1,9 +1,14 @@
+'use client'
+
 import Link from 'next/link'
 import { Tag, FolderOpen, Clock, CalendarDays } from 'lucide-react'
 import type { Post } from '@/lib/types'
+import { useConfig } from '@/hooks/useConfig'
 import TimeProgress from './widgets/TimeProgress'
 import CalendarHeatmap from './widgets/CalendarHeatmap'
 import BlogStats from './widgets/BlogStats'
+import WeatherWidget from './widgets/WeatherWidget'
+import EventCountdown from './widgets/EventCountdown'
 
 export default function Sidebar({
   posts,
@@ -14,35 +19,54 @@ export default function Sidebar({
   tags: string[]
   categories: string[]
 }) {
+  const { config } = useConfig()
   const recentPosts = posts.slice(0, 6)
   const pinnedPosts = posts.filter(p => p.pinned).slice(0, 3)
+
+  const siteTitle = config?.siteTitle || '我的博客'
+  const initial = siteTitle.charAt(0)
 
   return (
     <aside className="space-y-6">
       {/* 个人资料 */}
-      <div className="rounded-2xl border border-outline-variant bg-surface p-5 text-center">
-        <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-primary-container text-2xl font-bold text-on-primary-container">
-          B
+      {config?.showProfile !== false && (
+        <div className="rounded-2xl border border-outline-variant bg-surface p-5 text-center">
+          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-primary-container text-2xl font-bold text-on-primary-container">
+            {config?.siteAvatar ? (
+              <img src={config.siteAvatar} alt={siteTitle} className="h-full w-full rounded-full object-cover" />
+            ) : (
+              initial
+            )}
+          </div>
+          <h3 className="text-base font-semibold text-on-surface">{siteTitle}</h3>
+          <p className="mt-1 text-xs text-on-surface-variant">{config?.siteDescription || '分享技术、开发与生活'}</p>
+          {(config?.socialLinks?.length || 0) > 0 && (
+            <div className="mt-3 flex justify-center gap-2">
+              {config!.socialLinks!.map((link: { name: string; url: string }) => (
+                <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer"
+                  className="rounded-lg bg-surface-container-high px-3 py-1 text-xs text-on-surface-variant hover:bg-surface-container-higher transition-colors no-underline">
+                  {link.name}
+                </a>
+              ))}
+            </div>
+          )}
         </div>
-        <h3 className="text-base font-semibold text-on-surface">我的博客</h3>
-        <p className="mt-1 text-xs text-on-surface-variant">分享技术、开发与生活</p>
-        <div className="mt-3 flex justify-center gap-2">
-          <a href="https://github.com/f-ccc" target="_blank" rel="noopener noreferrer" className="rounded-lg bg-surface-container-high px-3 py-1 text-xs text-on-surface-variant hover:bg-surface-container-higher transition-colors no-underline">
-            GitHub
-          </a>
-        </div>
-      </div>
+      )}
 
-      {/* 公告（可选） */}
-      <div className="rounded-2xl border border-outline-variant bg-surface p-5">
-        <div className="flex items-start gap-3">
-          <span className="text-lg">💡</span>
-          <div>
-            <h3 className="text-sm font-semibold text-on-surface">公告</h3>
-            <p className="mt-1 text-xs text-on-surface-variant">欢迎来到我的博客！</p>
+      {/* 公告 */}
+      {config?.showAnnouncement && (
+        <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+          <div className="flex items-start gap-3">
+            <span className="text-lg">
+              {config?.announcementType === 'warning' ? '⚠️' : config?.announcementType === 'success' ? '🎉' : '💡'}
+            </span>
+            <div>
+              <h3 className="text-sm font-semibold text-on-surface">{config?.announcementTitle || '公告'}</h3>
+              <p className="mt-1 text-xs text-on-surface-variant">{config?.announcementContent || ''}</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* 置顶文章 */}
       {pinnedPosts.length > 0 && (
@@ -80,10 +104,10 @@ export default function Sidebar({
       </div>
 
       {/* 时间进度条 */}
-      <TimeProgress />
+      {config?.showTimeProgress !== false && <TimeProgress />}
 
       {/* 日历热力图 */}
-      <CalendarHeatmap posts={posts} />
+      {config?.showCalendar !== false && <CalendarHeatmap posts={posts} />}
 
       {/* 分类 */}
       {categories.length > 0 && (
@@ -118,7 +142,17 @@ export default function Sidebar({
       )}
 
       {/* 站点统计 */}
-      <BlogStats />
+      {config?.showStats !== false && <BlogStats />}
+
+      {/* 天气预报 */}
+      {config?.showWeather && config?.weatherCity && (
+        <WeatherWidget city={config.weatherCity} />
+      )}
+
+      {/* 活动倒计时 */}
+      {config?.showEvents && config?.events && config.events.length > 0 && (
+        <EventCountdown events={config.events} />
+      )}
 
       {/* 归档 */}
       <div className="rounded-2xl border border-outline-variant bg-surface p-5">

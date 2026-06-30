@@ -1,25 +1,30 @@
 import { getAllPosts, getAllTags, getAllCategories } from '@/lib/posts'
+import { getConfig } from '@/lib/config'
 import BlogCard from '@/components/BlogCard'
 import Sidebar from '@/components/Sidebar'
 
+export const dynamic = 'force-dynamic'
+
 export default function Home() {
+  const config = getConfig()
   const posts = getAllPosts()
   const tags = getAllTags()
   const categories = getAllCategories()
   const pinnedPosts = posts.filter(p => p.pinned)
+  const initial = (config.siteTitle || '我的博客').charAt(0)
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       {/* Hero */}
       <section className="mb-10 text-center">
         <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary-container text-3xl font-bold text-on-primary-container">
-          B
+          {initial}
         </div>
         <h1 className="mb-3 text-4xl font-bold tracking-tight text-on-surface md:text-5xl">
-          我的博客
+          {config.siteTitle || '我的博客'}
         </h1>
         <p className="mx-auto max-w-lg text-base text-on-surface-variant">
-          分享技术、开发和生活的个人博客
+          {config.siteDescription || '分享技术、开发和生活的个人博客'}
         </p>
       </section>
 

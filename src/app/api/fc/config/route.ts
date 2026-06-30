@@ -17,7 +17,7 @@ export async function PUT(request: NextRequest) {
   try {
     const data = await request.json()
     const config = updateConfig(data)
-    // 🎯 双管齐下：路径 + 标签双重失效
+    // 双管齐下：路径 + 标签双重失效
     revalidatePath('/', 'layout')
     revalidateTag('global-config', { expire: 0 })
     const { adminPassword, ...safeConfig } = config

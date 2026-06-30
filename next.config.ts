@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Self-hosted deployment configuration
+  output: 'standalone',
+  serverExternalPackages: ['gray-matter', 'next-mdx-remote'],
 };
 
 export default nextConfig;

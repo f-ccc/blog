@@ -4,9 +4,14 @@ import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
 import { Menu, X, Search } from 'lucide-react'
 import { useState } from 'react'
+import { useConfig } from '@/hooks/useConfig'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const { config } = useConfig()
+
+  const siteTitle = config?.siteTitle || '我的博客'
+  const initial = siteTitle.charAt(0)
 
   const navLinks = [
     { href: '/', label: '首页' },
@@ -22,9 +27,9 @@ export default function Navbar() {
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight text-on-surface no-underline">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-on-primary">
-            B
+            {initial}
           </span>
-          <span className="hidden sm:inline">我的博客</span>
+          <span className="hidden sm:inline">{siteTitle}</span>
         </Link>
 
         {/* Desktop Nav */}

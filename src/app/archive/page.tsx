@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { CalendarDays } from 'lucide-react'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: '归档',
   description: '文章归档',
