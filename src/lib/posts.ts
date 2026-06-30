@@ -65,7 +65,7 @@ export function getAllPosts(): Post[] {
 
       return {
         slug,
-        title: data.title || slug,
+        title: String(data.title || '') || slug,
         description: data.description || '',
         date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
         updated: data.updated ? new Date(data.updated).toISOString() : undefined,
@@ -147,11 +147,12 @@ export function searchPosts(query: string): Post[] {
 }
 
 export function createPost(data: Partial<Post> & { content: string }): Post {
-  const slug = data.slug || data.title?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\u4e00-\u9fa5-]/g, '') || `post-${Date.now()}`
+  const titleStr = String(data.title || '')
+  const slug = data.slug || titleStr.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\u4e00-\u9fa5-]/g, '') || `post-${Date.now()}`
   const filePath = path.join(postsDirectory, `${slug}.md`)
   
   const frontmatter = {
-    title: data.title || '未命名文章',
+    title: titleStr || '未命名文章',
     description: data.description || '',
     date: data.date || new Date().toISOString().split('T')[0],
     tags: data.tags || [],
@@ -162,9 +163,11 @@ export function createPost(data: Partial<Post> & { content: string }): Post {
   }
 
   const mdContent = `---\n${Object.entries(frontmatter)
+    .filter(([_, v]) => v !== null && v !== undefined)
     .map(([k, v]) => {
       if (Array.isArray(v)) return `${k}: [${v.map(i => `"${i}"`).join(', ')}]`
       if (typeof v === 'boolean') return `${k}: ${v}`
+      if (typeof v === 'string' && /^\d+$/.test(v)) return `${k}: "${v}"`
       return `${k}: ${v}`
     })
     .join('\n')}\n---\n\n${data.content}`
@@ -181,7 +184,7 @@ export function updatePost(slug: string, data: Partial<Post> & { content?: strin
   if (!existing) return null
 
   const frontmatter: Record<string, any> = {
-    title: data.title || existing.title,
+    title: String(data.title || '') || existing.title,
     description: data.description || existing.description,
     date: existing.date.split('T')[0],
     updated: new Date().toISOString().split('T')[0],
@@ -194,10 +197,11 @@ export function updatePost(slug: string, data: Partial<Post> & { content?: strin
 
   const content = data.content !== undefined ? data.content : existing.content
   const mdContent = `---\n${Object.entries(frontmatter)
-    .filter(([_, v]) => v !== null && v !== undefined)
+    .filter(([_, v]) => v !== null && v !== undefined && v !== '')
     .map(([k, v]) => {
       if (Array.isArray(v)) return `${k}: [${v.map(i => `"${i}"`).join(', ')}]`
       if (typeof v === 'boolean') return `${k}: ${v}`
+      if (typeof v === 'string' && /^\d+$/.test(v)) return `${k}: "${v}"`
       return `${k}: ${v}`
     })
     .join('\n')}\n---\n\n${content}`

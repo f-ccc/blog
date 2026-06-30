@@ -23,7 +23,8 @@ export default function NewPostPage() {
     e.preventDefault()
     setSaving(true)
 
-    const slug = form.slug || form.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\u4e00-\u9fa5-]/g, '')
+    const rawSlug = form.slug || form.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\u4e00-\u9fa5-]/g, '')
+    const slug = rawSlug || `post-${Date.now()}`
     
     const res = await fetch('/api/fc/posts', {
       method: 'POST',
