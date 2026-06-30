@@ -2,7 +2,7 @@
 
 /* ===== oklch Dynamic Color System ===== */
 :root {
-  --hue: 200;
+  --hue: 30;
   --saturation: 0.14;
 
   --bg: oklch(0.97 calc(var(--saturation) * 0.3) var(--hue));

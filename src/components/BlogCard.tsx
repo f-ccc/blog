@@ -2,64 +2,72 @@ import Link from 'next/link'
 import { Tag, Calendar, ArrowRight } from 'lucide-react'
 import type { Post } from '@/lib/posts'
 
-export default function BlogCard({ post }: { post: Post }) {
+export default function BlogCard({ post, variant = 'list' }: { post: Post; variant?: 'list' | 'grid' }) {
+  if (variant === 'grid') {
+    return (
+      <Link href={`/blog/${post.slug}`} className="group block no-underline">
+        <article className="glass-card overflow-hidden h-full flex flex-col">
+          {post.image ? (
+            <div className="relative aspect-[16/10] w-full overflow-hidden">
+              <img src={post.image} alt={post.title} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </div>
+          ) : (
+            <div className="aspect-[16/10] w-full bg-gradient-to-br from-primary/10 via-primary-container/20 to-secondary-container/15 flex items-center justify-center">
+              <span className="text-4xl font-bold text-primary/25 drop-shadow-sm">{post.title.charAt(0)}</span>
+            </div>
+          )}
+          <div className="p-4 flex flex-col flex-1">
+            <div className="mb-2 flex items-center gap-2 text-xs text-on-surface-variant">
+              <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary border border-primary/15">{post.category}</span>
+              <span className="inline-flex items-center gap-1"><Calendar size={12} />{new Date(post.date).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}</span>
+              {post.pinned && <span className="text-primary">📌</span>}
+            </div>
+            <h2 className="mb-1.5 text-base font-semibold text-on-surface group-hover:text-primary transition-colors duration-300 line-clamp-2">{post.title}</h2>
+            <p className="mb-3 line-clamp-2 text-xs leading-relaxed text-on-surface-variant flex-1">{post.description}</p>
+            {post.tags && post.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {post.tags.slice(0, 3).map(tag => <span key={tag} className="tag-chip text-[11px] py-0 px-2">{tag}</span>)}
+              </div>
+            )}
+          </div>
+        </article>
+      </Link>
+    )
+  }
+
   return (
     <Link href={`/blog/${post.slug}`} className="group block no-underline">
       <article className="glass-card overflow-hidden">
-        {post.image && (
-          <div className="aspect-[16/9] w-full overflow-hidden sm:aspect-[21/9]">
-            <img
-              src={post.image}
-              alt={post.title}
-              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            />
-          </div>
-        )}
-
-        <div className="p-5 sm:p-6">
-          <div className="mb-3 flex flex-wrap items-center gap-2.5 text-sm text-on-surface-variant">
-            <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-0.5 text-xs font-medium text-primary border border-primary/20">
-              {post.category}
-            </span>
-            <span className="inline-flex items-center gap-1 text-xs">
-              <Calendar size={13} />
-              {new Date(post.date).toLocaleDateString('zh-CN', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </span>
-            {post.pinned && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-tertiary-container/60 px-3 py-0.5 text-xs font-medium text-on-tertiary-container border border-on-tertiary-container/20">
-                📌 置顶
-              </span>
-            )}
-          </div>
-
-          <h2 className="mb-2 text-xl font-semibold text-on-surface group-hover:text-primary transition-colors duration-300">
-            {post.title}
-          </h2>
-
-          <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-on-surface-variant">
-            {post.description}
-          </p>
-
-          {post.tags && post.tags.length > 0 && (
-            <div className="mb-4 flex flex-wrap gap-1.5">
-              {post.tags.slice(0, 4).map(tag => (
-                <span key={tag} className="tag-chip text-xs">
-                  <Tag size={11} className="mr-1 opacity-60" />
-                  {tag}
-                </span>
-              ))}
-              {post.tags.length > 4 && (
-                <span className="inline-flex items-center px-2 py-0.5 text-xs text-on-surface-variant">+{post.tags.length - 4}</span>
-              )}
+        <div className="flex flex-col sm:flex-row">
+          {post.image ? (
+            <div className="relative w-full sm:w-52 shrink-0 overflow-hidden sm:aspect-[4/3]">
+              <img src={post.image} alt={post.title} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </div>
+          ) : (
+            <div className="w-full sm:w-52 shrink-0 sm:aspect-[4/3] bg-gradient-to-br from-primary/10 via-primary-container/20 to-secondary-container/15 flex items-center justify-center">
+              <span className="text-3xl font-bold text-primary/25 drop-shadow-sm">{post.title.charAt(0)}</span>
             </div>
           )}
-
-          <div className="flex items-center gap-1.5 text-sm font-medium text-primary opacity-70 group-hover:opacity-100 group-hover:gap-2.5 transition-all duration-300">
-            阅读更多 <ArrowRight size={15} />
+          <div className="p-5 flex flex-col flex-1 min-w-0">
+            <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
+              <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary border border-primary/15">{post.category}</span>
+              <span className="inline-flex items-center gap-1"><Calendar size={12} />{new Date(post.date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              {post.pinned && <span className="text-primary">📌 置顶</span>}
+            </div>
+            <h2 className="mb-1.5 text-lg font-semibold text-on-surface group-hover:text-primary transition-colors duration-300 line-clamp-1">{post.title}</h2>
+            <p className="mb-3 line-clamp-2 text-sm leading-relaxed text-on-surface-variant">{post.description}</p>
+            <div className="mt-auto flex items-center justify-between">
+              {post.tags && post.tags.length > 0 ? (
+                <div className="flex flex-wrap gap-1">
+                  {post.tags.slice(0, 3).map(tag => <span key={tag} className="tag-chip text-[11px] py-0 px-2">{tag}</span>)}
+                </div>
+              ) : <span />}
+              <span className="flex items-center gap-1 text-xs font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                阅读 <ArrowRight size={13} />
+              </span>
+            </div>
           </div>
         </div>
       </article>
