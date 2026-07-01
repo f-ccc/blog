@@ -1,14 +1,24 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { ArrowLeft, Save } from 'lucide-react'
+import { ArrowLeft, Save, MessageCircle, Trash2 } from 'lucide-react'
 import Link from 'next/link'
+
+interface Comment {
+  id: string
+  slug: string
+  nickname: string
+  email: string
+  content: string
+  avatar: string
+  createdAt: string
+}
 
 export default function EditPostPage() {
   const router = useRouter()
   const params = useParams()
-  const slug = params.slug as string
+  const slug = decodeURIComponent(params.slug as string)
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -20,9 +30,22 @@ export default function EditPostPage() {
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [comments, setComments] = useState<Comment[]>([])
+  const [loadingComments, setLoadingComments] = useState(true)
+
+  const fetchComments = useCallback(() => {
+    setLoadingComments(true)
+    fetch(`/api/comments?slug=${encodeURIComponent(slug)}`)
+      .then(res => res.json())
+      .then(data => {
+        setComments(Array.isArray(data) ? data : [])
+        setLoadingComments(false)
+      })
+      .catch(() => setLoadingComments(false))
+  }, [slug])
 
   useEffect(() => {
-    fetch(`/api/fc/posts/${slug}`)
+    fetch(`/api/fc/posts/${encodeURIComponent(slug)}`)
       .then(res => res.json())
       .then(post => {
         if (post.error) {
@@ -40,13 +63,14 @@ export default function EditPostPage() {
         })
         setLoading(false)
       })
-  }, [slug, router])
+    fetchComments()
+  }, [slug, router, fetchComments])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
 
-    const res = await fetch(`/api/fc/posts/${slug}`, {
+    const res = await fetch(`/api/fc/posts/${encodeURIComponent(slug)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -62,6 +86,30 @@ export default function EditPostPage() {
       alert('保存失败')
     }
     setSaving(false)
+  }
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (!confirm('确定删除这条评论吗？')) return
+    const res = await fetch(
+      `/api/comments?slug=${encodeURIComponent(slug)}&id=${commentId}`,
+      { method: 'DELETE' }
+    )
+    if (res.ok) {
+      setComments(prev => prev.filter(c => c.id !== commentId))
+    } else {
+      alert('删除失败')
+    }
+  }
+
+  const timeAgo = (dateStr: string) => {
+    const now = Date.now()
+    const then = new Date(dateStr).getTime()
+    const diff = Math.floor((now - then) / 1000)
+    if (diff < 60) return '刚刚'
+    if (diff < 3600) return `${Math.floor(diff / 60)} 分钟前`
+    if (diff < 86400) return `${Math.floor(diff / 3600)} 小时前`
+    if (diff < 2592000) return `${Math.floor(diff / 86400)} 天前`
+    return new Date(dateStr).toLocaleDateString('zh-CN')
   }
 
   if (loading) {
@@ -129,6 +177,56 @@ export default function EditPostPage() {
           </button>
         </div>
       </form>
+
+      {/* 评论管理 */}
+      <div className="mt-8 rounded-2xl border border-outline-variant bg-surface p-6">
+        <div className="mb-4 flex items-center gap-2">
+          <MessageCircle size={18} className="text-primary" />
+          <h2 className="text-lg font-semibold text-on-surface">评论管理</h2>
+          <span className="ml-auto rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
+            {comments.length} 条
+          </span>
+        </div>
+
+        {loadingComments ? (
+          <div className="py-8 text-center text-sm text-on-surface-variant">加载评论中...</div>
+        ) : comments.length === 0 ? (
+          <div className="py-8 text-center text-sm text-on-surface-variant">
+            暂无评论
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {comments.map(comment => (
+              <div key={comment.id} className="flex gap-3 rounded-xl border border-outline-variant/50 bg-surface-container-low p-4">
+                <img
+                  src={comment.avatar}
+                  alt={comment.nickname}
+                  className="h-9 w-9 shrink-0 rounded-full object-cover"
+                />
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-on-surface">{comment.nickname}</span>
+                    <span className="text-[11px] text-on-surface-variant">{timeAgo(comment.createdAt)}</span>
+                  </div>
+                  <p className="mt-1 text-[13px] leading-relaxed text-on-surface-variant break-all">
+                    {comment.content}
+                  </p>
+                  {comment.email && (
+                    <p className="mt-1 text-[11px] text-on-surface-variant/60">{comment.email}</p>
+                  )}
+                </div>
+                <button
+                  onClick={() => handleDeleteComment(comment.id)}
+                  className="shrink-0 self-start rounded-lg p-1.5 text-on-surface-variant/50 hover:bg-error/10 hover:text-error transition-colors cursor-pointer"
+                  title="删除评论"
+                >
+                  <Trash2 size={15} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

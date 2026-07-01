@@ -15,7 +15,8 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const decodedSlug = decodeURIComponent(slug)
+  const post = getPostBySlug(decodedSlug)
   if (!post) return { title: '未找到' }
   return {
     title: post.title,
@@ -24,7 +25,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const { slug } = await params
+  const { slug: rawSlug } = await params
+  const slug = decodeURIComponent(rawSlug)
   const post = getPostBySlug(slug)
   if (!post) notFound()
 

@@ -10,7 +10,7 @@ export default function PostActions({ slug }: { slug: string }) {
   const handleDelete = async () => {
     if (!confirm(`确定删除 "${slug}"？此操作不可恢复！`)) return
     
-    const res = await fetch(`/api/fc/posts/${slug}`, { method: 'DELETE' })
+    const res = await fetch(`/api/fc/posts/${encodeURIComponent(slug)}`, { method: 'DELETE' })
     if (res.ok) {
       router.refresh()
     } else {
@@ -21,7 +21,7 @@ export default function PostActions({ slug }: { slug: string }) {
   return (
     <div className="flex items-center gap-2 shrink-0 ml-4">
       <Link
-        href={`/fc/posts/${slug}/edit`}
+        href={`/fc/posts/${encodeURIComponent(slug)}/edit`}
         className="inline-flex items-center gap-1 rounded-lg bg-surface-container-high px-3 py-1.5 text-xs font-medium text-on-surface hover:bg-surface-container-higher transition-colors no-underline"
       >
         <Edit3 size={14} />

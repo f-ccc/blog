@@ -5,8 +5,9 @@ import { revalidatePath } from 'next/cache'
 export const dynamic = 'force-dynamic'
 
 export async function GET(req: NextRequest) {
-  const slug = req.nextUrl.searchParams.get('slug')
-  if (!slug) return NextResponse.json({ error: '缺少 slug 参数' }, { status: 400 })
+  const rawSlug = req.nextUrl.searchParams.get('slug')
+  if (!rawSlug) return NextResponse.json({ error: '缺少 slug 参数' }, { status: 400 })
+  const slug = decodeURIComponent(rawSlug)
   const comments = getComments(slug)
   return NextResponse.json(comments)
 }
@@ -14,7 +15,8 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { slug, nickname, email, content } = body
+    const { nickname, email, content } = body
+    const slug = decodeURIComponent(body.slug || '')
 
     if (!slug || !nickname || !content) {
       return NextResponse.json({ error: '昵称和内容不能为空' }, { status: 400 })
@@ -45,9 +47,10 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const slug = req.nextUrl.searchParams.get('slug')
+  const rawSlug = req.nextUrl.searchParams.get('slug')
   const id = req.nextUrl.searchParams.get('id')
-  if (!slug || !id) return NextResponse.json({ error: '缺少参数' }, { status: 400 })
+  if (!rawSlug || !id) return NextResponse.json({ error: '缺少参数' }, { status: 400 })
+  const slug = decodeURIComponent(rawSlug)
   deleteComment(slug, id)
   revalidatePath(`/blog/${slug}`)
   return NextResponse.json({ ok: true })

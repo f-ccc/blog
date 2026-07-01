@@ -91,7 +91,8 @@ export function getAllPosts(): Post[] {
 
 export function getPostBySlug(slug: string): Post | null {
   const posts = getAllPosts()
-  return posts.find(post => post.slug === slug) || null
+  const decoded = decodeURIComponent(slug)
+  return posts.find(post => post.slug === decoded || post.slug === slug) || null
 }
 
 export function getAllTags(): string[] {
@@ -177,7 +178,8 @@ export function createPost(data: Partial<Post> & { content: string }): Post {
 }
 
 export function updatePost(slug: string, data: Partial<Post> & { content?: string }): Post | null {
-  const filePath = path.join(postsDirectory, `${slug}.md`)
+  const decoded = decodeURIComponent(slug)
+  const filePath = path.join(postsDirectory, `${decoded}.md`)
   if (!fs.existsSync(filePath)) return null
 
   const existing = getPostBySlug(slug)
@@ -211,7 +213,8 @@ export function updatePost(slug: string, data: Partial<Post> & { content?: strin
 }
 
 export function deletePost(slug: string): boolean {
-  const filePath = path.join(postsDirectory, `${slug}.md`)
+  const decoded = decodeURIComponent(slug)
+  const filePath = path.join(postsDirectory, `${decoded}.md`)
   if (!fs.existsSync(filePath)) return false
   fs.unlinkSync(filePath)
   return true
