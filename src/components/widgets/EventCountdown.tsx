@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { PartyPopper, MapPin } from 'lucide-react'
 
 interface EventItem {
   name: string
@@ -41,22 +42,26 @@ export default function EventCountdown({ events }: { events: EventItem[] }) {
 
   return (
     <div className="glass-card-static p-5">
-      <h3 className="mb-3 text-sm font-semibold text-on-surface-variant">🎪 活动</h3>
+      <h3 className="mb-3 flex items-center gap-2 text-[13px] font-semibold text-on-surface-variant"><PartyPopper size={14} /> 活动</h3>
       
       {/* Poster */}
       {event.poster && (
-        <div className="mb-3 overflow-hidden rounded-xl">
+        <div className="mb-3 overflow-hidden rounded-2xl">
           <img src={event.poster} alt={event.name} className="h-32 w-full object-cover" />
         </div>
       )}
 
-      <h4 className="mb-1 text-sm font-semibold text-on-surface">{event.name}</h4>
-      {event.location && <p className="mb-2 text-xs text-on-surface-variant">📍 {event.location}</p>}
+      <h4 className="mb-1 text-[13px] font-semibold text-on-surface">{event.name}</h4>
+      {event.location && (
+        <p className="mb-2 flex items-center gap-1 text-[11px] text-on-surface-variant">
+          <MapPin size={12} /> {event.location}
+        </p>
+      )}
 
       {/* Countdown */}
-      <div className="mb-2 flex gap-2">
+      <div className="mb-2 flex gap-1.5">
         {time.passed ? (
-          <span className="text-sm font-medium text-tertiary">已开始/已结束</span>
+          <span className="text-[13px] font-medium text-tertiary">已开始/已结束</span>
         ) : (
           <>
             <TimeBlock value={time.days} label="天" />
@@ -68,7 +73,7 @@ export default function EventCountdown({ events }: { events: EventItem[] }) {
       </div>
 
       {event.ticketUrl && (
-        <a href={event.ticketUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block rounded-lg bg-primary px-3 py-1 text-xs text-on-primary no-underline">
+        <a href={event.ticketUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-[11px] text-primary border border-primary/10 hover:bg-primary/15 transition-colors duration-300 no-underline">
           购票 {event.price && `(${event.price})`}
         </a>
       )}
@@ -79,7 +84,7 @@ export default function EventCountdown({ events }: { events: EventItem[] }) {
             <button
               key={i}
               onClick={() => { setCurrent(i); setTime(getTimeRemaining(events[i].targetDate)) }}
-              className={`h-1.5 flex-1 rounded-full transition-colors cursor-pointer ${i === current ? 'bg-primary' : 'bg-surface-container-high'}`}
+              className={`h-1 flex-1 rounded-full transition-colors duration-300 cursor-pointer ${i === current ? 'bg-primary' : 'bg-surface-container-high'}`}
             />
           ))}
         </div>
@@ -90,8 +95,8 @@ export default function EventCountdown({ events }: { events: EventItem[] }) {
 
 function TimeBlock({ value, label }: { value: number; label: string }) {
   return (
-    <div className="flex flex-1 flex-col items-center rounded-lg bg-surface-container-high p-2">
-      <span className="text-lg font-bold text-on-surface">{String(value).padStart(2, '0')}</span>
+    <div className="flex flex-1 flex-col items-center rounded-xl bg-surface-container-high p-2">
+      <span className="text-base font-bold text-on-surface">{String(value).padStart(2, '0')}</span>
       <span className="text-[10px] text-on-surface-variant">{label}</span>
     </div>
   )

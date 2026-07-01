@@ -36,33 +36,33 @@ export default async function BlogPostPage({ params }: Props) {
     <article className="mx-auto max-w-3xl px-4 py-8">
       <Link
         href="/blog"
-        className="mb-6 inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-primary transition-colors no-underline"
+        className="mb-6 inline-flex items-center gap-1 text-[13px] text-on-surface-variant hover:text-primary transition-colors duration-300 no-underline"
       >
-        <ArrowLeft size={16} />
+        <ArrowLeft size={14} />
         返回博客
       </Link>
 
       <header className="mb-8">
-        <div className="mb-3 flex flex-wrap items-center gap-3 text-sm text-on-surface-variant">
-          <span className="rounded-full bg-primary-container px-3 py-0.5 text-xs font-medium text-on-primary-container">
+        <div className="mb-3 flex flex-wrap items-center gap-3 text-[13px] text-on-surface-variant">
+          <span className="rounded-full bg-primary-container px-3 py-0.5 text-[11px] font-medium text-on-primary-container">
             {post.category}
           </span>
           <span className="inline-flex items-center gap-1">
-            <Calendar size={14} />
+            <Calendar size={13} />
             {new Date(post.date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
           </span>
           {post.updated && (
             <span className="inline-flex items-center gap-1">
-              <Clock size={14} />
+              <Clock size={13} />
               更新于 {new Date(post.updated).toLocaleDateString('zh-CN')}
             </span>
           )}
         </div>
 
-        <h1 className="mb-4 text-3xl font-bold leading-tight text-on-surface md:text-4xl">
+        <h1 className="mb-4 text-2xl font-bold leading-tight tracking-tight text-on-surface md:text-3xl">
           {post.title}
         </h1>
-        <p className="mb-4 text-lg text-on-surface-variant">{post.description}</p>
+        <p className="mb-4 text-[13px] text-on-surface-variant">{post.description}</p>
 
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2">
@@ -90,12 +90,12 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
 
       {/* 上一篇/下一篇 */}
-      <div className="mt-12 grid grid-cols-2 gap-4 border-t border-outline-variant pt-6">
+      <div className="mt-12 grid grid-cols-2 gap-4 border-t border-outline-variant/30 pt-5">
         <div>
           {prevPost && (
             <Link href={`/blog/${prevPost.slug}`} className="group no-underline">
-              <span className="text-xs text-on-surface-variant">← 上一篇</span>
-              <p className="mt-1 text-sm font-medium text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+              <span className="text-[11px] text-on-surface-variant">← 上一篇</span>
+              <p className="mt-1 text-[13px] font-medium text-on-surface group-hover:text-primary transition-colors duration-300 line-clamp-1">
                 {prevPost.title}
               </p>
             </Link>
@@ -104,8 +104,8 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="text-right">
           {nextPost && (
             <Link href={`/blog/${nextPost.slug}`} className="group no-underline">
-              <span className="text-xs text-on-surface-variant">下一篇 →</span>
-              <p className="mt-1 text-sm font-medium text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+              <span className="text-[11px] text-on-surface-variant">下一篇 →</span>
+              <p className="mt-1 text-[13px] font-medium text-on-surface group-hover:text-primary transition-colors duration-300 line-clamp-1">
                 {nextPost.title}
               </p>
             </Link>
@@ -114,14 +114,14 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
 
       {/* 评论区占位（可接入 Waline / Giscus / Twikoo） */}
-      <div className="mt-8 rounded-2xl border border-outline-variant bg-surface p-6">
+      <div className="mt-8 glass-card-static p-5">
         <h3 className="mb-4 text-base font-semibold text-on-surface">💬 评论</h3>
         <div className="rounded-xl bg-surface-container-high p-6 text-center">
-          <p className="text-sm text-on-surface-variant">
+          <p className="text-[13px] text-on-surface-variant">
             评论功能待接入 —— 支持 Waline / Giscus / Twikoo 等主流评论系统
           </p>
-          <p className="mt-1 text-xs text-on-surface-variant">
-            在 <code className="rounded bg-surface-container px-1 text-xs">src/components/CommentSection.tsx</code> 中配置你的评论服务
+          <p className="mt-1 text-[11px] text-on-surface-variant">
+            在 <code className="rounded bg-surface-container px-1 text-[11px]">src/components/CommentSection.tsx</code> 中配置你的评论服务
           </p>
         </div>
       </div>

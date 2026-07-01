@@ -14,18 +14,18 @@ export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-on-surface">关于</h1>
-        <p className="mt-1 text-on-surface-variant">关于我和这个博客</p>
+        <h1 className="text-2xl font-bold tracking-tight text-on-surface">关于</h1>
+        <p className="mt-1 text-[13px] text-on-surface-variant">关于我和这个博客</p>
       </div>
 
-      <div className="rounded-2xl border border-outline-variant bg-surface p-8">
+      <div className="glass-card-static p-8">
         <div className="mb-6 flex items-center gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary-container text-2xl font-bold text-on-primary-container">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary">
             {config.siteName?.charAt(0) || 'B'}
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-on-surface">{config.siteName || config.siteTitle || '我的博客'}</h2>
-            <p className="text-sm text-on-surface-variant">{config.siteDescription || ''}</p>
+            <h2 className="text-base font-semibold text-on-surface">{config.siteName || config.siteTitle || '我的博客'}</h2>
+            <p className="text-[13px] text-on-surface-variant">{config.siteDescription || ''}</p>
           </div>
         </div>
 

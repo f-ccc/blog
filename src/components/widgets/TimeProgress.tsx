@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Timer } from 'lucide-react'
 
 export default function TimeProgress() {
   const [mounted, setMounted] = useState(false)
@@ -36,7 +37,7 @@ export default function TimeProgress() {
   if (!mounted) {
     return (
       <div className="glass-card-static p-5">
-        <h3 className="mb-3 text-sm font-semibold text-on-surface-variant">⏱ 时间进度</h3>
+        <h3 className="mb-3 flex items-center gap-2 text-[13px] font-semibold text-on-surface-variant"><Timer size={14} /> 时间进度</h3>
         <div className="space-y-2.5">
           <SkeletonBar />
           <SkeletonBar />
@@ -49,7 +50,7 @@ export default function TimeProgress() {
 
   return (
     <div className="glass-card-static p-5">
-      <h3 className="mb-3 text-sm font-semibold text-on-surface-variant">⏱ 时间进度</h3>
+      <h3 className="mb-3 flex items-center gap-2 text-[13px] font-semibold text-on-surface-variant"><Timer size={14} /> 时间进度</h3>
       <div className="space-y-2.5">
         <ProgressBar label="本年" value={progress.year} color="bg-primary" />
         <ProgressBar label="本月" value={progress.month} color="bg-secondary" />
@@ -63,11 +64,11 @@ export default function TimeProgress() {
 function ProgressBar({ label, value, color }: { label: string; value: number; color: string }) {
   return (
     <div>
-      <div className="mb-1 flex justify-between text-xs text-on-surface-variant">
+      <div className="mb-1 flex justify-between text-[11px] text-on-surface-variant">
         <span>{label}</span>
         <span>{value.toFixed(1)}%</span>
       </div>
-      <div className="h-2 overflow-hidden rounded-full bg-surface-container-high">
+      <div className="h-1.5 overflow-hidden rounded-full bg-surface-container-high">
         <div className={`h-full rounded-full transition-all duration-1000 ${color}`} style={{ width: `${Math.min(value, 100)}%` }} />
       </div>
     </div>
@@ -77,11 +78,11 @@ function ProgressBar({ label, value, color }: { label: string; value: number; co
 function SkeletonBar() {
   return (
     <div>
-      <div className="mb-1 flex justify-between text-xs text-on-surface-variant">
-        <span className="h-3 w-8 rounded bg-surface-container-high" />
-        <span className="h-3 w-10 rounded bg-surface-container-high" />
+      <div className="mb-1 flex justify-between text-[11px] text-on-surface-variant">
+        <span className="h-2.5 w-8 rounded bg-surface-container-high" />
+        <span className="h-2.5 w-10 rounded bg-surface-container-high" />
       </div>
-      <div className="h-2 overflow-hidden rounded-full bg-surface-container-high">
+      <div className="h-1.5 overflow-hidden rounded-full bg-surface-container-high">
         <div className="h-full w-0 rounded-full" />
       </div>
     </div>

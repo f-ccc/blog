@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { Calendar } from 'lucide-react'
 import type { Post } from '@/lib/types'
 
 export default function CalendarHeatmap({ posts }: { posts: Post[] }) {
@@ -24,11 +25,11 @@ export default function CalendarHeatmap({ posts }: { posts: Post[] }) {
   return (
     <div className="glass-card-static p-5">
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-on-surface-variant">📅 日历</h3>
+        <h3 className="flex items-center gap-2 text-[13px] font-semibold text-on-surface-variant"><Calendar size={14} /> 日历</h3>
         <div className="flex items-center gap-2">
-          <button onClick={() => setCurrentMonth(new Date(year, month - 1))} className="text-xs text-on-surface-variant hover:text-on-surface cursor-pointer">←</button>
-          <span className="text-xs font-medium text-on-surface">{monthNames[month]} {year}</span>
-          <button onClick={() => setCurrentMonth(new Date(year, month + 1))} className="text-xs text-on-surface-variant hover:text-on-surface cursor-pointer">→</button>
+          <button onClick={() => setCurrentMonth(new Date(year, month - 1))} className="text-[11px] text-on-surface-variant hover:text-primary transition-colors duration-300 cursor-pointer">←</button>
+          <span className="text-[11px] font-medium text-on-surface">{monthNames[month]} {year}</span>
+          <button onClick={() => setCurrentMonth(new Date(year, month + 1))} className="text-[11px] text-on-surface-variant hover:text-primary transition-colors duration-300 cursor-pointer">→</button>
         </div>
       </div>
 
@@ -67,9 +68,9 @@ export default function CalendarHeatmap({ posts }: { posts: Post[] }) {
 
       {/* Posts this month */}
       {postsByDay.length > 0 && (
-        <div className="mt-3 space-y-1">
+        <div className="mt-3 space-y-0.5">
           {postsByDay.slice(0, 3).map(post => (
-            <Link key={post.slug} href={`/blog/${post.slug}`} className="flex items-center gap-2 rounded-xl px-2 py-1 text-xs text-on-surface-variant hover:bg-primary/8 transition-colors no-underline">
+            <Link key={post.slug} href={`/blog/${post.slug}`} className="flex items-center gap-2 rounded-lg px-2 py-1 text-[11px] text-on-surface-variant hover:bg-primary/6 transition-colors duration-300 no-underline">
               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
               <span className="line-clamp-1">{post.title}</span>
             </Link>

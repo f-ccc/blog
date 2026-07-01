@@ -26,20 +26,20 @@ function CategoriesContent() {
     : allPosts
 
   if (loading) {
-    return <div className="mx-auto max-w-5xl px-4 py-8"><p className="text-on-surface-variant">加载中...</p></div>
+    return <div className="mx-auto max-w-5xl px-4 py-8"><p className="text-[13px] text-on-surface-variant">加载中...</p></div>
   }
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-on-surface">分类</h1>
-        <p className="mt-1 text-on-surface-variant">按分类浏览文章</p>
+        <h1 className="text-2xl font-bold tracking-tight text-on-surface">分类</h1>
+        <p className="mt-1 text-[13px] text-on-surface-variant">按分类浏览文章</p>
       </div>
 
       <div className="mb-6 flex flex-wrap gap-2">
         <Link
           href="/categories"
-          className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors no-underline ${
+          className={`rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors duration-300 no-underline ${
             !selectedCategory
               ? 'bg-primary text-on-primary'
               : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-higher'
@@ -51,7 +51,7 @@ function CategoriesContent() {
           <Link
             key={cat}
             href={`/categories?name=${encodeURIComponent(cat)}`}
-            className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors no-underline ${
+            className={`rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors duration-300 no-underline ${
               selectedCategory === cat
                 ? 'bg-primary text-on-primary'
                 : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-higher'
@@ -64,18 +64,18 @@ function CategoriesContent() {
 
       <div className="space-y-4">
         {filteredPosts.length === 0 ? (
-          <div className="rounded-2xl border border-outline-variant bg-surface p-12 text-center">
-            <p className="text-on-surface-variant">暂无文章</p>
+          <div className="glass-card-static p-12 text-center">
+            <p className="text-[13px] text-on-surface-variant">暂无文章</p>
           </div>
         ) : (
           filteredPosts.map(post => (
             <Link key={post.slug} href={`/blog/${post.slug}`} className="group block no-underline">
-              <div className="rounded-2xl border border-outline-variant bg-surface p-5 card-hover">
-                <h2 className="text-lg font-semibold text-on-surface group-hover:text-primary transition-colors">
+              <div className="rounded-2xl border border-outline-variant/40 bg-surface p-5 card-hover">
+                <h2 className="text-base font-semibold text-on-surface group-hover:text-primary transition-colors duration-300">
                   {post.title}
                 </h2>
-                <p className="mt-1 text-sm text-on-surface-variant line-clamp-1">{post.description}</p>
-                <div className="mt-2 flex items-center gap-3 text-xs text-on-surface-variant">
+                <p className="mt-1 text-[13px] text-on-surface-variant line-clamp-1">{post.description}</p>
+                <div className="mt-2 flex items-center gap-3 text-[11px] text-on-surface-variant">
                   <span>{new Date(post.date).toLocaleDateString('zh-CN')}</span>
                   <span className="rounded-full bg-primary-container px-2 py-0.5 text-on-primary-container">
                     {post.category}
@@ -92,7 +92,7 @@ function CategoriesContent() {
 
 export default function CategoriesPage() {
   return (
-    <Suspense fallback={<div className="mx-auto max-w-5xl px-4 py-8"><p className="text-on-surface-variant">加载中...</p></div>}>
+    <Suspense fallback={<div className="mx-auto max-w-5xl px-4 py-8"><p className="text-[13px] text-on-surface-variant">加载中...</p></div>}>
       <CategoriesContent />
     </Suspense>
   )
