@@ -15,10 +15,10 @@ function timeAgo(dateStr: string): string {
   const now = Date.now()
   const then = new Date(dateStr).getTime()
   const diff = Math.floor((now - then) / 1000)
-  if (diff < 60) return '\u521a\u521a'
-  if (diff < 3600) return `${Math.floor(diff / 60)} \u5206\u949f\u524d`
-  if (diff < 86400) return `${Math.floor(diff / 3600)} \u5c0f\u65f6\u524d`
-  if (diff < 2592000) return `${Math.floor(diff / 86400)} \u5929\u524d`
+  if (diff < 60) return '刚刚'
+  if (diff < 3600) return `${Math.floor(diff / 60)} 分钟前`
+  if (diff < 86400) return `${Math.floor(diff / 3600)} 小时前`
+  if (diff < 2592000) return `${Math.floor(diff / 86400)} 天前`
   return new Date(dateStr).toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
@@ -37,12 +37,12 @@ export default function Sidebar({
   const recentPosts = posts.slice(0, 6)
   const pinnedPosts = posts.filter(p => p.pinned).slice(0, 3)
 
-  const siteTitle = config?.siteTitle || '\u6211\u7684\u535a\u5ba2'
+  const siteTitle = config?.siteTitle || '我的博客'
   const initial = siteTitle.charAt(0)
 
   return (
     <aside className="space-y-3 stagger-children">
-      {/* \u4e2a\u4eba\u8d44\u6599 */}
+      {/* 个人资料 */}
       {config?.showProfile !== false && (
         <div className="glass-card-static p-4 text-center">
           <div className="mx-auto mb-2.5 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary border border-primary/15">
@@ -53,7 +53,7 @@ export default function Sidebar({
             )}
           </div>
           <h3 className="text-[13px] font-semibold text-on-surface">{siteTitle}</h3>
-          <p className="mt-0.5 text-[11px] leading-relaxed text-on-surface-variant">{config?.siteDescription || '\u5206\u4eab\u6280\u672f\u3001\u5f00\u53d1\u4e0e\u751f\u6d3b'}</p>
+          <p className="mt-0.5 text-[11px] leading-relaxed text-on-surface-variant">{config?.siteDescription || '分享技术、开发与生活'}</p>
           {(config?.socialLinks?.length || 0) > 0 && (
             <div className="mt-2.5 flex justify-center gap-1">
               {config!.socialLinks!.map((link: { name: string; url: string }) => (
@@ -67,7 +67,7 @@ export default function Sidebar({
         </div>
       )}
 
-      {/* \u516c\u544a */}
+      {/* 公告 */}
       {config?.showAnnouncement && (
         <div className="glass-card-static p-4">
           <div className="flex items-start gap-2.5">
@@ -75,18 +75,18 @@ export default function Sidebar({
               <Megaphone size={14} />
             </span>
             <div>
-              <h3 className="text-[12px] font-semibold text-on-surface">{config?.announcementTitle || '\u516c\u544a'}</h3>
+              <h3 className="text-[12px] font-semibold text-on-surface">{config?.announcementTitle || '公告'}</h3>
               <p className="mt-0.5 text-[11px] leading-relaxed text-on-surface-variant">{config?.announcementContent || ''}</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* \u7f6e\u9876\u6587\u7ae0 */}
+      {/* 置顶文章 */}
       {pinnedPosts.length > 0 && (
         <div className="glass-card-static p-4">
           <h3 className="mb-2 flex items-center gap-1.5 text-[12px] font-semibold text-on-surface-variant">
-            <Pin size={13} /> \u7f6e\u9876
+            <Pin size={13} /> 置顶
           </h3>
           <ul className="space-y-0">
             {pinnedPosts.map(post => (
@@ -100,10 +100,10 @@ export default function Sidebar({
         </div>
       )}
 
-      {/* \u6700\u65b0\u6587\u7ae0 */}
+      {/* 最新文章 */}
       <div className="glass-card-static p-4">
         <h3 className="mb-2 flex items-center gap-1.5 text-[12px] font-semibold text-on-surface-variant">
-          <Clock size={13} /> \u6700\u65b0\u6587\u7ae0
+          <Clock size={13} /> 最新文章
         </h3>
         <ul className="space-y-0">
           {recentPosts.map(post => (
@@ -117,11 +117,11 @@ export default function Sidebar({
         </ul>
       </div>
 
-      {/* \u6700\u65b0\u8bc4\u8bba */}
+      {/* 最新评论 */}
       {recentComments.length > 0 && (
         <div className="glass-card-static p-4">
           <h3 className="mb-2 flex items-center gap-1.5 text-[12px] font-semibold text-on-surface-variant">
-            <MessageCircle size={13} /> \u6700\u65b0\u8bc4\u8bba
+            <MessageCircle size={13} /> 最新评论
           </h3>
           <ul className="space-y-0">
             {recentComments.map(comment => (
@@ -146,17 +146,17 @@ export default function Sidebar({
         </div>
       )}
 
-      {/* \u65f6\u95f4\u8fdb\u5ea6\u6761 */}
+      {/* 时间进度条 */}
       {config?.showTimeProgress !== false && <TimeProgress />}
 
-      {/* \u65e5\u5386\u70ed\u529b\u56fe */}
+      {/* 日历热力图 */}
       {config?.showCalendar !== false && <CalendarHeatmap posts={posts} />}
 
-      {/* \u5206\u7c7b */}
+      {/* 分类 */}
       {categories.length > 0 && (
         <div className="glass-card-static p-4">
           <h3 className="mb-2 flex items-center gap-1.5 text-[12px] font-semibold text-on-surface-variant">
-            <FolderOpen size={13} /> \u5206\u7c7b
+            <FolderOpen size={13} /> 分类
           </h3>
           <div className="space-y-0">
             {categories.map(cat => (
@@ -170,11 +170,11 @@ export default function Sidebar({
         </div>
       )}
 
-      {/* \u6807\u7b7e\u4e91 */}
+      {/* 标签云 */}
       {tags.length > 0 && (
         <div className="glass-card-static p-4">
           <h3 className="mb-2 flex items-center gap-1.5 text-[12px] font-semibold text-on-surface-variant">
-            <Tag size={13} /> \u6807\u7b7e\u4e91
+            <Tag size={13} /> 标签云
           </h3>
           <div className="flex flex-wrap gap-1">
             {tags.map(tag => (
@@ -184,26 +184,26 @@ export default function Sidebar({
         </div>
       )}
 
-      {/* \u7ad9\u70b9\u7edf\u8ba1 */}
+      {/* 站点统计 */}
       {config?.showStats !== false && <BlogStats />}
 
-      {/* \u5929\u6c14\u9884\u62a5 */}
+      {/* 天气预报 */}
       {config?.showWeather && config?.weatherCity && (
         <WeatherWidget city={config.weatherCity} />
       )}
 
-      {/* \u6d3b\u52a8\u5012\u8ba1\u65f6 */}
+      {/* 活动倒计时 */}
       {config?.showEvents && config?.events && config.events.length > 0 && (
         <EventCountdown events={config.events} />
       )}
 
-      {/* \u5f52\u6863 */}
+      {/* 归档 */}
       <div className="glass-card-static p-4">
         <h3 className="mb-2 flex items-center gap-1.5 text-[12px] font-semibold text-on-surface-variant">
-          <CalendarDays size={13} /> \u5f52\u6863
+          <CalendarDays size={13} /> 归档
         </h3>
         <Link href="/archive" className="flex items-center justify-between rounded-md px-2 py-1.5 text-[12px] text-on-surface transition-colors duration-200 hover:bg-primary/5 hover:text-primary no-underline">
-          <span>\u6240\u6709\u6587\u7ae0</span>
+          <span>所有文章</span>
           <span className="rounded-full bg-primary/8 px-1.5 py-px text-[10px] text-primary border border-primary/10">{posts.length}</span>
         </Link>
       </div>
