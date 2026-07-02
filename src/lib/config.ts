@@ -25,6 +25,8 @@ export interface SysConfig {
   showWeather: boolean
   showEvents: boolean
   showStats: boolean
+  showReadingProgress: boolean
+  showBackToTop: boolean
   announcementTitle: string
   announcementContent: string
   announcementType: 'info' | 'warning' | 'success'
@@ -87,6 +89,8 @@ const defaultConfig: SysConfig = {
   showWeather: false,
   showEvents: false,
   showStats: true,
+  showReadingProgress: true,
+  showBackToTop: true,
   announcementTitle: '公告',
   announcementContent: '欢迎来到我的博客！',
   announcementType: 'info',

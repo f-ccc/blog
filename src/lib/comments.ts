@@ -85,6 +85,21 @@ export const AVATARS = [
   '/avatars/avatar-8.png',
 ]
 
+export function getRecentComments(limit = 5): Comment[] {
+  ensureDir()
+  const files = fs.readdirSync(commentsDir).filter(f => f.endsWith('.json'))
+  const all: Comment[] = []
+  for (const file of files) {
+    try {
+      const data = fs.readFileSync(path.join(commentsDir, file), 'utf8')
+      const comments = JSON.parse(data) as Comment[]
+      all.push(...comments)
+    } catch {}
+  }
+  all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  return all.slice(0, limit)
+}
+
 export function getRandomAvatar(): string {
   return AVATARS[Math.floor(Math.random() * AVATARS.length)]
 }

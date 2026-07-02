@@ -1,8 +1,11 @@
 import Link from 'next/link'
-import { Tag, Calendar, ArrowRight, Pin } from 'lucide-react'
+import { Tag, Calendar, ArrowRight, Pin, Clock } from 'lucide-react'
 import type { Post } from '@/lib/posts'
+import { getReadingTime } from '@/lib/utils'
 
 export default function BlogCard({ post, variant = 'list' }: { post: Post; variant?: 'list' | 'grid' }) {
+  const readTime = getReadingTime(post.content)
+
   if (variant === 'grid') {
     return (
       <Link href={`/blog/${post.slug}`} className="group block no-underline">
@@ -21,6 +24,7 @@ export default function BlogCard({ post, variant = 'list' }: { post: Post; varia
             <div className="mb-2 flex items-center gap-2 text-xs text-on-surface-variant">
               <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary border border-primary/15">{post.category}</span>
               <span className="inline-flex items-center gap-1"><Calendar size={12} />{new Date(post.date).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}</span>
+              <span className="inline-flex items-center gap-1"><Clock size={11} />{readTime} 分钟</span>
               {post.pinned && <span className="inline-flex items-center justify-center h-4 w-4 rounded-full bg-primary/10"><Pin size={9} className="text-primary" /></span>}
             </div>
             <h2 className="mb-1.5 text-[15px] font-semibold text-on-surface group-hover:text-primary transition-colors duration-300 line-clamp-2">{post.title}</h2>
@@ -54,6 +58,7 @@ export default function BlogCard({ post, variant = 'list' }: { post: Post; varia
             <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
               <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary border border-primary/15">{post.category}</span>
               <span className="inline-flex items-center gap-1"><Calendar size={12} />{new Date(post.date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              <span className="inline-flex items-center gap-1"><Clock size={11} />{readTime} 分钟</span>
               {post.pinned && <span className="inline-flex items-center justify-center h-4 w-4 rounded-full bg-primary/10"><Pin size={9} className="text-primary" /></span>}
             </div>
             <h2 className="mb-1.5 text-base font-semibold text-on-surface group-hover:text-primary transition-colors duration-300 line-clamp-1">{post.title}</h2>

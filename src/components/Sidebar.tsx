@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { Tag, FolderOpen, Clock, CalendarDays, Megaphone, Pin } from 'lucide-react'
+import { Tag, FolderOpen, Clock, CalendarDays, Megaphone, Pin, MessageCircle } from 'lucide-react'
 import type { Post } from '@/lib/types'
+import type { Comment } from '@/lib/comments'
 import { useConfig } from '@/hooks/useConfig'
 import TimeProgress from './widgets/TimeProgress'
 import CalendarHeatmap from './widgets/CalendarHeatmap'
@@ -10,14 +11,27 @@ import BlogStats from './widgets/BlogStats'
 import WeatherWidget from './widgets/WeatherWidget'
 import EventCountdown from './widgets/EventCountdown'
 
+function timeAgo(dateStr: string): string {
+  const now = Date.now()
+  const then = new Date(dateStr).getTime()
+  const diff = Math.floor((now - then) / 1000)
+  if (diff < 60) return '刚刚'
+  if (diff < 3600) return `${Math.floor(diff / 60)} 分钟前`
+  if (diff < 86400) return `${Math.floor(diff / 3600)} 小时前`
+  if (diff < 2592000) return `${Math.floor(diff / 86400)} 天前`
+  return new Date(dateStr).toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' })
+}
+
 export default function Sidebar({
   posts,
   tags,
   categories,
+  recentComments = [],
 }: {
   posts: Post[]
   tags: string[]
   categories: string[]
+  recentComments?: Comment[]
 }) {
   const { config } = useConfig()
   const recentPosts = posts.slice(0, 6)
@@ -102,6 +116,35 @@ export default function Sidebar({
           ))}
         </ul>
       </div>
+
+      {/* 最新评论 */}
+      {recentComments.length > 0 && (
+        <div className="glass-card-static p-5">
+          <h3 className="mb-3 flex items-center gap-2 text-[13px] font-semibold text-on-surface-variant">
+            <MessageCircle size={14} /> 最新评论
+          </h3>
+          <ul className="space-y-0.5">
+            {recentComments.map(comment => (
+              <li key={comment.id}>
+                <Link href={`/blog/${comment.slug}`} className="group flex items-start gap-2.5 rounded-lg px-2 py-1.5 transition-colors duration-300 hover:bg-primary/6 no-underline">
+                  <img
+                    src={comment.avatar}
+                    alt={comment.nickname}
+                    className="mt-0.5 h-6 w-6 shrink-0 rounded-full border border-outline-variant/20 object-cover"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[12px] font-medium text-on-surface group-hover:text-primary transition-colors duration-300 truncate">{comment.nickname}</span>
+                      <span className="text-[11px] text-on-surface-variant shrink-0">{timeAgo(comment.createdAt)}</span>
+                    </div>
+                    <p className="text-[11px] text-on-surface-variant line-clamp-2 leading-relaxed">{comment.content}</p>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* 时间进度条 */}
       {config?.showTimeProgress !== false && <TimeProgress />}

@@ -1,11 +1,27 @@
 import { getAllPosts, getAllTags, getAllCategories } from '@/lib/posts'
+import { getStats } from '@/lib/config'
+import { getComments, getAllCommentsCount } from '@/lib/comments'
 import Link from 'next/link'
-import { FileText, Tag, FolderOpen, Plus } from 'lucide-react'
+import { FileText, Tag, FolderOpen, Plus, Type, CalendarDays, MessageCircle } from 'lucide-react'
 
 export default function FcDashboard() {
   const posts = getAllPosts()
   const tags = getAllTags()
   const categories = getAllCategories()
+  const stats = getStats()
+  const commentsCountMap = getAllCommentsCount()
+  const totalComments = Object.values(commentsCountMap).reduce((sum, c) => sum + c, 0)
+
+  // Gather latest 5 comments across all posts
+  const allComments: { slug: string; title: string; nickname: string; content: string; createdAt: string }[] = []
+  for (const post of posts) {
+    const postComments = getComments(post.slug)
+    for (const c of postComments) {
+      allComments.push({ slug: post.slug, title: post.title, nickname: c.nickname, content: c.content, createdAt: c.createdAt })
+    }
+  }
+  allComments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  const recentComments = allComments.slice(0, 5)
 
   return (
     <div>
@@ -24,7 +40,7 @@ export default function FcDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-3">
+      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div className="rounded-2xl border border-outline-variant bg-surface p-5">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container">
@@ -58,6 +74,39 @@ export default function FcDashboard() {
             </div>
           </div>
         </div>
+        <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container">
+              <Type size={20} className="text-on-primary-container" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-on-surface">{stats.totalWords.toLocaleString()}</p>
+              <p className="text-xs text-on-surface-variant">总字数</p>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary-container">
+              <CalendarDays size={20} className="text-on-secondary-container" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-on-surface">{stats.daysRunning}</p>
+              <p className="text-xs text-on-surface-variant">运行天数</p>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-outline-variant bg-surface p-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-tertiary-container">
+              <MessageCircle size={20} className="text-on-tertiary-container" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-on-surface">{totalComments}</p>
+              <p className="text-xs text-on-surface-variant">评论总数</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Recent Posts */}
@@ -88,6 +137,39 @@ export default function FcDashboard() {
           {posts.length === 0 && (
             <div className="px-6 py-8 text-center text-sm text-on-surface-variant">
               暂无文章
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Recent Comments */}
+      <div className="mt-6 rounded-2xl border border-outline-variant bg-surface overflow-hidden">
+        <div className="border-b border-outline-variant px-6 py-4">
+          <h2 className="text-base font-semibold text-on-surface">最近评论</h2>
+        </div>
+        <div className="divide-y divide-outline-variant">
+          {recentComments.map(comment => (
+            <div key={comment.slug + comment.createdAt} className="px-6 py-3.5">
+              <div className="flex items-center justify-between">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-on-surface">{comment.nickname}</span>
+                    <span className="text-xs text-on-surface-variant">评论于</span>
+                    <Link href={`/blog/${comment.slug}`} className="text-xs text-primary hover:underline no-underline">
+                      {comment.title}
+                    </Link>
+                  </div>
+                  <p className="mt-1 truncate text-sm text-on-surface-variant">{comment.content}</p>
+                </div>
+                <span className="shrink-0 ml-4 text-xs text-on-surface-variant">
+                  {new Date(comment.createdAt).toLocaleDateString('zh-CN')}
+                </span>
+              </div>
+            </div>
+          ))}
+          {recentComments.length === 0 && (
+            <div className="px-6 py-8 text-center text-sm text-on-surface-variant">
+              暂无评论
             </div>
           )}
         </div>

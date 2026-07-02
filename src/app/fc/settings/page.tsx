@@ -113,15 +113,9 @@ export default function FcSettingsPage() {
           </Field>
         </Section>
 
-        <Section title="特效开关">
-          <ToggleField label="🌸 樱花飘落" checked={config.sakuraEnabled} onChange={v => update('sakuraEnabled', v)} />
-          {config.sakuraEnabled && (
-            <Field label="樱花数量">
-              <input type="number" min="10" max="200" value={config.sakuraCount} onChange={e => update('sakuraCount', parseInt(e.target.value))}
-                className="w-24 rounded-xl border border-outline-variant bg-surface-container-low px-4 py-2 text-sm" />
-            </Field>
-          )}
-          <ToggleField label="🌊 水波纹" checked={config.waveEnabled} onChange={v => update('waveEnabled', v)} />
+        <Section title="功能开关">
+          <ToggleField label="阅读进度条" checked={config.showReadingProgress ?? true} onChange={v => update('showReadingProgress', v)} />
+          <ToggleField label="回到顶部按钮" checked={config.showBackToTop ?? true} onChange={v => update('showBackToTop', v)} />
         </Section>
 
         <Section title="侧边栏组件开关">
@@ -131,6 +125,42 @@ export default function FcSettingsPage() {
           <ToggleField label="天气预报" checked={config.showWeather} onChange={v => update('showWeather', v)} />
           <ToggleField label="活动倒计时" checked={config.showEvents} onChange={v => update('showEvents', v)} />
           <ToggleField label="音乐播放器" checked={config.showMusicPlayer} onChange={v => update('showMusicPlayer', v)} />
+        </Section>
+
+        <Section title="社交链接">
+          {(config.socialLinks || []).map((link: { name: string; url: string; icon: string }, index: number) => (
+            <div key={index} className="flex items-end gap-2">
+              <div className="flex-1">
+                <label className="mb-1 block text-xs text-on-surface-variant">名称</label>
+                <input value={link.name} onChange={e => {
+                  const links = [...(config.socialLinks || [])]
+                  links[index] = { ...links[index], name: e.target.value }
+                  update('socialLinks', links)
+                }} className="w-full rounded-xl border border-outline-variant bg-surface-container-low px-3 py-2 text-sm" />
+              </div>
+              <div className="flex-[2]">
+                <label className="mb-1 block text-xs text-on-surface-variant">链接</label>
+                <input value={link.url} onChange={e => {
+                  const links = [...(config.socialLinks || [])]
+                  links[index] = { ...links[index], url: e.target.value }
+                  update('socialLinks', links)
+                }} className="w-full rounded-xl border border-outline-variant bg-surface-container-low px-3 py-2 text-sm" />
+              </div>
+              <button onClick={() => {
+                const links = [...(config.socialLinks || [])]
+                links.splice(index, 1)
+                update('socialLinks', links)
+              }} className="mb-1 rounded-lg bg-error-container px-3 py-2 text-xs text-on-error-container hover:opacity-80 transition-opacity cursor-pointer">
+                删除
+              </button>
+            </div>
+          ))}
+          <button onClick={() => {
+            const links = [...(config.socialLinks || []), { name: '', url: '', icon: '' }]
+            update('socialLinks', links)
+          }} className="rounded-xl border border-dashed border-outline-variant px-4 py-2 text-sm text-on-surface-variant hover:border-primary hover:text-primary transition-colors cursor-pointer">
+            + 添加链接
+          </button>
         </Section>
 
         <Section title="站点运行时间">

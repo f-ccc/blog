@@ -1,4 +1,5 @@
 import { getAllPosts, getPostBySlug } from '@/lib/posts'
+import { getReadingTime } from '@/lib/utils'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import remarkGfm from 'remark-gfm'
@@ -6,6 +7,7 @@ import { Calendar, Tag, ArrowLeft, Clock } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import CommentSection from '@/components/CommentSection'
+import ReadingProgress from '@/components/ReadingProgress'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,9 +36,12 @@ export default async function BlogPostPage({ params }: Props) {
   const currentIndex = allPosts.findIndex(p => p.slug === slug)
   const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null
   const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
+  const readTime = getReadingTime(post.content)
 
   return (
-    <article className="mx-auto max-w-3xl px-4 py-8">
+    <>
+      <ReadingProgress />
+      <article className="mx-auto max-w-3xl px-4 py-8">
       <Link
         href="/blog"
         className="mb-6 inline-flex items-center gap-1 text-[13px] text-on-surface-variant hover:text-primary transition-colors duration-300 no-underline"
@@ -53,6 +58,10 @@ export default async function BlogPostPage({ params }: Props) {
           <span className="inline-flex items-center gap-1">
             <Calendar size={13} />
             {new Date(post.date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Clock size={13} />
+            约 {readTime} 分钟
           </span>
           {post.updated && (
             <span className="inline-flex items-center gap-1">
@@ -119,5 +128,6 @@ export default async function BlogPostPage({ params }: Props) {
       {/* 评论区 */}
       {post.comment !== false && <CommentSection slug={slug} />}
     </article>
+    </>
   )
 }

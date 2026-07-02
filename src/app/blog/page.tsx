@@ -1,4 +1,5 @@
 import { getAllPosts } from '@/lib/posts'
+import { getRecentComments } from '@/lib/comments'
 import type { Metadata } from 'next'
 import BlogListPage from './BlogListPage'
 
@@ -11,5 +12,6 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   const posts = getAllPosts()
-  return <BlogListPage posts={posts} />
+  const recentComments = getRecentComments(5)
+  return <BlogListPage posts={posts} recentComments={recentComments} />
 }

@@ -3,10 +3,11 @@
 import BlogCard from '@/components/BlogCard'
 import Sidebar from '@/components/Sidebar'
 import type { Post } from '@/lib/types'
+import type { Comment } from '@/lib/comments'
 import { useState, useMemo, useEffect } from 'react'
 import { LayoutGrid, LayoutList } from 'lucide-react'
 
-export default function BlogListPage({ posts: initialPosts }: { posts: Post[] }) {
+export default function BlogListPage({ posts: initialPosts, recentComments = [] }: { posts: Post[]; recentComments?: Comment[] }) {
   const [allPosts, setAllPosts] = useState<Post[]>(initialPosts)
   const [tags, setTags] = useState<string[]>([])
   const [categories, setCategories] = useState<string[]>([])
@@ -103,7 +104,7 @@ export default function BlogListPage({ posts: initialPosts }: { posts: Post[] })
         </div>
 
         <div className="w-full shrink-0 lg:w-80">
-          <Sidebar posts={allPosts} tags={tags} categories={categories} />
+          <Sidebar posts={allPosts} tags={tags} categories={categories} recentComments={recentComments} />
         </div>
       </div>
     </div>

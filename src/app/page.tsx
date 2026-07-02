@@ -1,5 +1,6 @@
 import { getAllPosts, getAllTags, getAllCategories } from '@/lib/posts'
 import { getConfig } from '@/lib/config'
+import { getRecentComments } from '@/lib/comments'
 import BlogCard from '@/components/BlogCard'
 import Sidebar from '@/components/Sidebar'
 import { Pin, FileText } from 'lucide-react'
@@ -11,31 +12,32 @@ export default function Home() {
   const posts = getAllPosts()
   const tags = getAllTags()
   const categories = getAllCategories()
+  const recentComments = getRecentComments(5)
   const pinnedPosts = posts.filter(p => p.pinned)
   const initial = (config.siteTitle || '我的博客').charAt(0)
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       {/* Hero */}
-      <section className="mb-12 text-center animate-fade-in-up">
-        <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 text-3xl font-bold text-primary border border-primary/20 shadow-sm shadow-primary/10 backdrop-blur-sm">
+      <section className="mb-8 text-center animate-fade-in-up">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-2xl font-bold text-primary border border-primary/20 shadow-sm shadow-primary/10 backdrop-blur-sm">
           {config.siteAvatar ? (
             <img src={config.siteAvatar} alt={initial} className="h-full w-full rounded-full object-cover" />
           ) : (
             initial
           )}
         </div>
-        <h1 className="mb-3 text-3xl font-bold tracking-tight md:text-4xl">
+        <h1 className="mb-2.5 text-2xl font-bold tracking-tight md:text-3xl">
           <span className="bg-gradient-to-r from-on-surface via-primary to-secondary bg-clip-text text-transparent">{config.siteTitle || '我的博客'}</span>
         </h1>
-        <p className="mx-auto max-w-lg text-base text-on-surface-variant leading-relaxed">
+        <p className="mx-auto max-w-lg text-[13px] text-on-surface-variant leading-relaxed">
           {config.siteDescription || '分享技术、开发和生活的个人博客'}
         </p>
-        <div className="mt-4 flex justify-center gap-3">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/8 px-4 py-1.5 text-[11px] font-medium text-primary border border-primary/15">
+        <div className="mt-3 flex justify-center gap-2">
+          <span className="inline-flex items-center gap-1 rounded-full bg-primary/8 px-3 py-1 text-[11px] font-medium text-primary border border-primary/15">
             {posts.length} 篇文章
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary/8 px-4 py-1.5 text-[11px] font-medium text-secondary border border-secondary/15">
+          <span className="inline-flex items-center gap-1 rounded-full bg-secondary/8 px-3 py-1 text-[11px] font-medium text-secondary border border-secondary/15">
             {categories.length} 个分类
           </span>
         </div>
@@ -83,7 +85,7 @@ export default function Home() {
         </div>
 
         <div className="w-full shrink-0 lg:w-80">
-          <Sidebar posts={posts} tags={tags} categories={categories} />
+          <Sidebar posts={posts} tags={tags} categories={categories} recentComments={recentComments} />
         </div>
       </div>
     </div>
