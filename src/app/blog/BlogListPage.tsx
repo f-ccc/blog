@@ -49,24 +49,24 @@ export default function BlogListPage({ posts: initialPosts, recentComments = [] 
   }, [allPosts, search, selectedCategory, selectedTag])
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
-      <div className="mb-8 animate-fade-in-up">
-        <h1 className="text-2xl font-bold tracking-tight text-on-surface">博客</h1>
-        <p className="mt-1 text-on-surface-variant">探索所有文章</p>
+    <div className="mx-auto max-w-5xl px-4 py-6">
+      <div className="mb-5 animate-fade-in-up">
+        <h1 className="text-xl font-bold tracking-tight text-on-surface">博客</h1>
+        <p className="mt-0.5 text-[12px] text-on-surface-variant">探索所有文章</p>
       </div>
 
-      <div className="mb-6 flex flex-wrap items-center gap-3 animate-fade-in-up">
+      <div className="mb-5 flex flex-wrap items-center gap-2.5 animate-fade-in-up">
         <input
           type="text"
           placeholder="搜索文章..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="rounded-xl border border-outline-variant/40 bg-surface px-4 py-2.5 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/40 flex-1 min-w-[200px] backdrop-blur-sm"
+          className="rounded-lg border border-outline-variant/40 bg-surface px-3.5 py-2 text-[12px] text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/40 flex-1 min-w-[200px] backdrop-blur-sm"
         />
         <select
           value={selectedCategory}
           onChange={e => setSelectedCategory(e.target.value)}
-          className="rounded-xl border border-outline-variant/40 bg-surface px-4 py-2.5 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40 backdrop-blur-sm"
+          className="rounded-lg border border-outline-variant/40 bg-surface px-3.5 py-2 text-[12px] text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40 backdrop-blur-sm"
         >
           <option value="">全部分类</option>
           {categories.map(cat => (
@@ -75,25 +75,25 @@ export default function BlogListPage({ posts: initialPosts, recentComments = [] 
         </select>
         <button
           onClick={toggleLayout}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-outline-variant/40 bg-surface text-on-surface-variant hover:text-primary hover:border-primary/30 transition-all duration-300 backdrop-blur-sm cursor-pointer"
+          className="flex h-8 w-8 items-center justify-center rounded-lg border border-outline-variant/40 bg-surface text-on-surface-variant hover:text-primary hover:border-primary/30 transition-all duration-300 backdrop-blur-sm cursor-pointer"
           title={layout === 'grid' ? '切换到列表视图' : '切换到网格视图'}
         >
-          {layout === 'grid' ? <LayoutList size={18} /> : <LayoutGrid size={18} />}
+          {layout === 'grid' ? <LayoutList size={16} /> : <LayoutGrid size={16} />}
         </button>
       </div>
 
-      <div className="flex flex-col gap-8 lg:flex-row">
+      <div className="flex flex-col gap-6 lg:flex-row">
         <div className="min-w-0 flex-1">
           {posts.length === 0 ? (
-            <div className="glass-card-static p-12 text-center">
-              <p className="text-lg text-on-surface-variant">没有匹配的文章</p>
+            <div className="glass-card-static p-10 text-center">
+              <p className="text-base text-on-surface-variant">没有匹配的文章</p>
             </div>
           ) : (
             <>
-              <p className="mb-4 text-[13px] text-on-surface-variant">共 {posts.length} 篇</p>
+              <p className="mb-3 text-[11px] text-on-surface-variant">共 {posts.length} 篇</p>
               <div className={layout === 'grid'
-                ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 stagger-children'
-                : 'flex flex-col gap-4 stagger-children'
+                ? 'grid grid-cols-1 gap-3 sm:grid-cols-2 stagger-children'
+                : 'flex flex-col gap-3 stagger-children'
               }>
                 {posts.map(post => (
                   <BlogCard key={post.slug} post={post} variant={layout} />

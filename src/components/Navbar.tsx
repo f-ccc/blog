@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import ThemeToggle from './ThemeToggle'
 import { Menu, X, Search } from 'lucide-react'
 import { useState } from 'react'
@@ -9,6 +10,12 @@ import { useConfig } from '@/hooks/useConfig'
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const { config } = useConfig()
+  const pathname = usePathname()
+
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/'
+    return pathname.startsWith(href)
+  }
 
   const siteTitle = config?.siteTitle || '我的博客'
   const initial = siteTitle.charAt(0)
@@ -34,19 +41,26 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <nav className="hidden items-center gap-1 md:flex">
-          {navLinks.map(link => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="relative rounded-lg px-3 py-1.5 text-[13px] font-medium text-on-surface-variant transition-colors duration-300 hover:text-on-surface no-underline after:absolute after:bottom-0 after:left-1/2 after:h-px after:w-0 after:-translate-x-1/2 after:bg-primary after:transition-all after:duration-300 hover:after:w-4"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map(link => {
+            const active = isActive(link.href)
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`relative rounded-lg px-3 py-1.5 text-[13px] font-medium no-underline transition-colors duration-200 ${
+                  active
+                    ? 'text-on-surface after:absolute after:bottom-[-2px] after:left-1/2 after:h-[1.5px] after:w-4 after:-translate-x-1/2 after:rounded-full after:bg-primary'
+                    : 'text-on-surface-variant hover:text-on-surface'
+                }`}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
           <div className="ml-3 flex items-center gap-0.5">
             <Link
               href="/search"
-              className="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all duration-300 no-underline"
+              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-variant transition-all duration-200 hover:text-primary hover:bg-primary/8 no-underline"
               aria-label="搜索"
             >
               <Search size={16} />
@@ -57,13 +71,13 @@ export default function Navbar() {
 
         {/* Mobile */}
         <div className="flex items-center gap-0.5 md:hidden">
-          <Link href="/search" className="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant hover:text-primary no-underline">
+          <Link href="/search" className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-variant transition-colors duration-200 hover:text-primary no-underline">
             <Search size={16} />
           </Link>
           <ThemeToggle />
           <button
             onClick={() => setOpen(!open)}
-            className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-primary/8 cursor-pointer transition-colors"
+            className="flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-200 hover:bg-primary/8 cursor-pointer"
             aria-label="菜单"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
@@ -72,18 +86,25 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <nav className="animate-slide-down border-t border-outline-variant/20 px-4 pb-4 pt-2 md:hidden" style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(24px)' }}>
-          {navLinks.map((link, i) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              className="block rounded-xl px-3 py-2.5 text-base font-medium text-on-surface-variant hover:bg-primary/8 hover:text-on-surface no-underline transition-colors"
-              style={{ animationDelay: `${i * 0.05}s` }}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav className="animate-slide-down border-t border-outline-variant/20 px-3 pb-3 pt-1 md:hidden" style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(16px) saturate(1.5)' }}>
+          {navLinks.map((link, i) => {
+            const active = isActive(link.href)
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className={`flex min-h-[44px] items-center rounded-xl px-3 py-2.5 text-[15px] font-medium no-underline transition-colors duration-200 ${
+                  active
+                    ? 'text-on-surface bg-primary/6'
+                    : 'text-on-surface-variant hover:bg-primary/8 hover:text-on-surface'
+                }`}
+                style={{ animationDelay: `${i * 0.04}s` }}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
         </nav>
       )}
     </header>

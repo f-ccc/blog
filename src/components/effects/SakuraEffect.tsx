@@ -38,12 +38,12 @@ export default function SakuraEffect({ count = 50 }: { count?: number }) {
       petals.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 8 + 4,
-        speedX: Math.random() * 1 - 0.5,
-        speedY: Math.random() * 1.5 + 0.5,
+        size: Math.random() * 4 + 3,
+        speedX: Math.random() * 0.6 - 0.3,
+        speedY: Math.random() * 0.8 + 0.3,
         rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: (Math.random() - 0.5) * 0.05,
-        opacity: Math.random() * 0.5 + 0.3,
+        rotationSpeed: (Math.random() - 0.5) * 0.02,
+        opacity: Math.random() * 0.2 + 0.4,
       })
     }
 
@@ -66,7 +66,7 @@ export default function SakuraEffect({ count = 50 }: { count?: number }) {
         ctx.translate(petal.x, petal.y)
         ctx.rotate(petal.rotation)
         ctx.globalAlpha = petal.opacity
-        ctx.fillStyle = '#f9a8d4'
+        ctx.fillStyle = '#e8a090'
         ctx.beginPath()
         ctx.ellipse(0, 0, petal.size / 2, petal.size / 4, 0, 0, Math.PI * 2)
         ctx.fill()

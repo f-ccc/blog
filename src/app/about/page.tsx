@@ -12,20 +12,20 @@ export default function AboutPage() {
   const config = getConfig()
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight text-on-surface">关于</h1>
-        <p className="mt-1 text-[13px] text-on-surface-variant">关于我和这个博客</p>
+    <div className="mx-auto max-w-3xl px-4 py-6">
+      <div className="mb-5">
+        <h1 className="text-xl font-bold tracking-tight text-on-surface">关于</h1>
+        <p className="mt-0.5 text-[12px] text-on-surface-variant">关于我和这个博客</p>
       </div>
 
-      <div className="glass-card-static p-8">
-        <div className="mb-6 flex items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary">
+      <div className="glass-card-static p-6">
+        <div className="mb-5 flex items-center gap-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary">
             {config.siteName?.charAt(0) || 'B'}
           </div>
           <div>
-            <h2 className="text-base font-semibold text-on-surface">{config.siteName || config.siteTitle || '我的博客'}</h2>
-            <p className="text-[13px] text-on-surface-variant">{config.siteDescription || ''}</p>
+            <h2 className="text-[13px] font-semibold text-on-surface">{config.siteName || config.siteTitle || '我的博客'}</h2>
+            <p className="text-[12px] text-on-surface-variant">{config.siteDescription || ''}</p>
           </div>
         </div>
 

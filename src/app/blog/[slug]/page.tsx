@@ -41,46 +41,46 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <>
       <ReadingProgress />
-      <article className="mx-auto max-w-3xl px-4 py-8">
+      <article className="mx-auto max-w-3xl px-4 py-6">
       <Link
         href="/blog"
-        className="mb-6 inline-flex items-center gap-1 text-[13px] text-on-surface-variant hover:text-primary transition-colors duration-300 no-underline"
+        className="mb-4 inline-flex items-center gap-1 text-[12px] text-on-surface-variant hover:text-primary transition-colors duration-300 no-underline"
       >
-        <ArrowLeft size={14} />
+        <ArrowLeft size={13} />
         返回博客
       </Link>
 
-      <header className="mb-8">
-        <div className="mb-3 flex flex-wrap items-center gap-3 text-[13px] text-on-surface-variant">
-          <span className="rounded-full bg-primary-container px-3 py-0.5 text-[11px] font-medium text-on-primary-container">
+      <header className="mb-6">
+        <div className="mb-2.5 flex flex-wrap items-center gap-2.5 text-[11px] text-on-surface-variant">
+          <span className="rounded-full bg-primary-container px-2 py-0.5 text-[10px] font-medium text-on-primary-container">
             {post.category}
           </span>
           <span className="inline-flex items-center gap-1">
-            <Calendar size={13} />
+            <Calendar size={12} />
             {new Date(post.date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
           </span>
           <span className="inline-flex items-center gap-1">
-            <Clock size={13} />
+            <Clock size={12} />
             约 {readTime} 分钟
           </span>
           {post.updated && (
             <span className="inline-flex items-center gap-1">
-              <Clock size={13} />
+              <Clock size={12} />
               更新于 {new Date(post.updated).toLocaleDateString('zh-CN')}
             </span>
           )}
         </div>
 
-        <h1 className="mb-4 text-2xl font-bold leading-tight tracking-tight text-on-surface md:text-3xl">
+        <h1 className="mb-3 text-xl font-bold leading-tight tracking-tight text-on-surface md:text-2xl">
           {post.title}
         </h1>
-        <p className="mb-4 text-[13px] text-on-surface-variant">{post.description}</p>
+        <p className="mb-3 text-[12px] text-on-surface-variant">{post.description}</p>
 
         {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {post.tags.map(tag => (
-              <Link key={tag} href={`/tags?name=${encodeURIComponent(tag)}`} className="tag-chip no-underline">
-                <Tag size={12} className="mr-1" />
+              <Link key={tag} href={`/tags?name=${encodeURIComponent(tag)}`} className="tag-chip text-[10px] no-underline">
+                <Tag size={10} className="mr-0.5" />
                 {tag}
               </Link>
             ))}
@@ -89,7 +89,7 @@ export default async function BlogPostPage({ params }: Props) {
       </header>
 
       {post.image && (
-        <div className="mb-8 overflow-hidden rounded-2xl">
+        <div className="mb-6 overflow-hidden rounded-lg">
           <img src={post.image} alt={post.title} className="h-auto w-full object-cover" />
         </div>
       )}
@@ -102,12 +102,12 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
 
       {/* 上一篇/下一篇 */}
-      <div className="mt-12 grid grid-cols-2 gap-4 border-t border-outline-variant/30 pt-5">
+      <div className="mt-10 grid grid-cols-2 gap-3 border-t border-outline-variant/30 pt-4">
         <div>
           {prevPost && (
             <Link href={`/blog/${prevPost.slug}`} className="group no-underline">
               <span className="text-[11px] text-on-surface-variant">← 上一篇</span>
-              <p className="mt-1 text-[13px] font-medium text-on-surface group-hover:text-primary transition-colors duration-300 line-clamp-1">
+              <p className="mt-0.5 text-[12px] font-medium text-on-surface group-hover:text-primary transition-colors duration-300 line-clamp-1">
                 {prevPost.title}
               </p>
             </Link>
@@ -117,7 +117,7 @@ export default async function BlogPostPage({ params }: Props) {
           {nextPost && (
             <Link href={`/blog/${nextPost.slug}`} className="group no-underline">
               <span className="text-[11px] text-on-surface-variant">下一篇 →</span>
-              <p className="mt-1 text-[13px] font-medium text-on-surface group-hover:text-primary transition-colors duration-300 line-clamp-1">
+              <p className="mt-0.5 text-[12px] font-medium text-on-surface group-hover:text-primary transition-colors duration-300 line-clamp-1">
                 {nextPost.title}
               </p>
             </Link>

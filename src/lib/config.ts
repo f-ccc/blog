@@ -79,7 +79,7 @@ const defaultConfig: SysConfig = {
   cardOpacity: 100,
   solidColor: '#f5f5f5',
   sakuraEnabled: false,
-  sakuraCount: 50,
+  sakuraCount: 30,
   waveEnabled: false,
   showProfile: true,
   showAnnouncement: false,
